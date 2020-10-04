@@ -56,10 +56,10 @@ public class Search {
 	//Iterative deepening, tree-search and graph-search
 	public String IterativeDeepeningTreeSearch() {
 		int limit = 0;
-		int result;
+		String result;
 		while(true){
 			result = TreeSearchDepthLimited(new FrontierLIFO(), limit++);
-			if( result ){
+			if( result != null ){
 				return result;
 			}
 		}
@@ -67,10 +67,10 @@ public class Search {
 	
 	public String IterativeDeepeningGraphSearch() {
 		int limit = 0;
-		int result;
+		String result;
 		while(true){
 			result = GraphSearchDepthLimited(new FrontierLIFO(), limit++);
-			if( result ){
+			if( result != null ){
 				return result;
 			}
 		}

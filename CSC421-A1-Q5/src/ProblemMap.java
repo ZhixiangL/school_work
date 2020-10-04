@@ -72,7 +72,7 @@ public class ProblemMap extends Problem {
 	}
 
 	public static void main(String[] args) throws Exception {
-		ProblemMap problem = new ProblemMap("romania.txt","romaniaSLD.txt");
+		ProblemMap problem = new ProblemMap("../romania.txt","../romaniaSLD.txt");
 		problem.initialState = "Timisoara";
 		problem.goalState = "Bucharest";
 		
