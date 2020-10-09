@@ -88,7 +88,7 @@ public class ProblemNPuzzle extends Problem {
 		System.out.println("BreadthFirstGraphSearch:\t" + search.BreadthFirstGraphSearch());
 		System.out.println("UniformCostGraphSearch:\t\t" + search.UniformCostGraphSearch());
 		//System.out.println("DepthFirstGraphSearch:\t\t" + search.DepthFirstGraphSearch());
-		//System.out.println("GreedyBestGraphSearch:\t\t" + search.GreedyBestFirstGraphSearch());
+		System.out.println("GreedyBestGraphSearch:\t\t" + search.GreedyBestFirstGraphSearch());
 		System.out.println("AstarGraphSearch:\t\t" + search.AstarGraphSearch());
 		
 		System.out.println("\n\nIterativeDeepening----------------------");

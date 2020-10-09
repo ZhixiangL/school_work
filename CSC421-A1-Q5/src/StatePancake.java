@@ -15,4 +15,11 @@ public class StatePancake {
         }
         return result+"\n";
     }
+    public boolean equals(Object o) {
+        return java.util.Arrays.deepEquals( tuple.toArray(), ((StatePancake) o).tuple.toArray() );
+    }
+
+    public int hashCode() {
+        return tuple.hashCode();
+    } 
 }

@@ -24,4 +24,11 @@ public class StateWGC {
         result += ";  boat position: "+ Integer.toString(boatPosition)+"\n";
         return result;
     }
+    public boolean equals(Object o) {
+        StateWGC obj = (StateWGC) o;
+        return leftBank.equals(obj.leftBank) && rightBank.equals(obj.rightBank) && boatPosition == obj.boatPosition;
+    }
+    public int hashCode() {
+        return leftBank.hashCode()+rightBank.hashCode()+boatPosition;
+    } 
 }
