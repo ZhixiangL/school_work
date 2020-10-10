@@ -15,7 +15,8 @@ public class ProblemCannibals extends Problem {
 
         if (can_state.canArray[cannR]==3 && can_state.canArray[missR]==3 && can_state.canArray[boatR]==1)
             return true;
-        else return false;
+        
+        return false;
 	}
 
     Set<Object> getSuccessors(Object state) {
@@ -147,22 +148,23 @@ public class ProblemCannibals extends Problem {
 		int[] canArray = {3,3,1,0,0,0};
 		problem.initialState = new StateCannibals(canArray);
 		Search search  = new Search(problem);
-    System.out.println("Solution to the Cannibals Problem using various uninformed search stratgides: \n");
-		System.out.println("BreadthFirstTreeSearch:\t" + search.BreadthFirstTreeSearch());
+
+    System.out.println("TreeSearch------------------------");
+		System.out.println("BreadthFirstTreeSearch:\t\t" + search.BreadthFirstTreeSearch());
+		System.out.println("UniformCostTreeSearch:\t\t" + search.UniformCostTreeSearch());
+		System.out.println("DepthFirstTreeSearch:\t\t" + search.DepthFirstTreeSearch());
+		System.out.println("GreedyBestFirstTreeSearch:\t" + search.GreedyBestFirstTreeSearch());
+		System.out.println("AstarTreeSearch:\t\t" + search.AstarTreeSearch());
+		
+		System.out.println("\n\nGraphSearch----------------------");
 		System.out.println("BreadthFirstGraphSearch:\t" + search.BreadthFirstGraphSearch());
-		System.out.println("DepthFirstTreeSearch:\t" + search.DepthFirstTreeSearch());
-		System.out.println("DepthFirstGraphSearch:\t" + search.DepthFirstGraphSearch());
-		System.out.println("UniformCostTreeSearch:\t" + search.UniformCostTreeSearch());
-		System.out.println("UniformCostGraphSearch:\t" + search.UniformCostGraphSearch());
+		System.out.println("UniformCostGraphSearch:\t\t" + search.UniformCostGraphSearch());
+		System.out.println("DepthFirstGraphSearch:\t\t" + search.DepthFirstGraphSearch());
+		System.out.println("GreedyBestGraphSearch:\t\t" + search.GreedyBestFirstGraphSearch());
+		System.out.println("AstarGraphSearch:\t\t" + search.AstarGraphSearch());
+		
+		System.out.println("\n\nIterativeDeepening----------------------");
 		System.out.println("IterativeDeepeningTreeSearch:\t" + search.IterativeDeepeningTreeSearch());
 		System.out.println("IterativeDeepeningGraphSearch:\t" + search.IterativeDeepeningGraphSearch());
-
-    System.out.println("\nSolution to the Cannibals Problem using various Informed search stratgides: \n");
-    System.out.println("Use h1(n) = (Number of people on initial side) - 1 as heuristic function");
-    System.out.println("Consider the relaxed Problem: Consider the cannibals can not eat missionaries. So we can compute the number of trips to ship 6 people since the boat can take two people, but after each trip, one person has to travel the boat back for other people. Therefore, each trip, we can transport one person to the right one time. Therefore, the h(n) = number of people on the left side - 1\n");
-    System.out.println("GreedyBestFirstTreeSearch:\t" + search.GreedyBestFirstTreeSearch());
-    System.out.println("GreedyBestFirstGraphSearch:\t" + search.GreedyBestFirstGraphSearch());
-    System.out.println("AstarTreeSearch:\t" + search.AstarTreeSearch());
-    System.out.println("AstarGraphSearch:\t" + search.AstarGraphSearch());
 	}
 }

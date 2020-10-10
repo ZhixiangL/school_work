@@ -1,19 +1,20 @@
+import java.util.*;
+
 public class StateCannibals 
 {    
     int canArray[];
     
-    public StateCannibals(int[] canArray) { this.canArray = canArray; }
+    public StateCannibals(int[] canArray) { 
+        this.canArray = canArray; 
+    }
     
-    //It has to be a copy of values not reference because we will 
-    //create many states and don't want to overwrite the same array.
     public StateCannibals(StateCannibals state) {
     	canArray = new int[6];
         for(int i=0; i<6; i++) 
             this.canArray[i] = state.canArray[i];
     }
     
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o){
         StateCannibals state = (StateCannibals) o;
         
         for (int i=0; i<6; i++)
@@ -24,15 +25,14 @@ public class StateCannibals
     }
     
     public int hashCode() {
-        return canArray[0]*100000 + canArray[1]*10000 + canArray[2]*1000 +
-               canArray[3]*100 + canArray[4]*10 + canArray[5];
+        return Arrays.hashCode(canArray);
     }    
     
     public String toString()
     {
-        String ret = "";
+        String result = "";
         for (int i=0; i<6; i++)
-            ret += " " + this.canArray[i];
-        return ret;
+            result += " " + this.canArray[i];
+        return result;
     }
 }
