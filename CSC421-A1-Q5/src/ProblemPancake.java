@@ -94,7 +94,8 @@ public class ProblemPancake extends Problem{
 		System.out.println("\n\nIterativeDeepening----------------------");
 		System.out.println("IterativeDeepeningTreeSearch:\t" + search.IterativeDeepeningTreeSearch());
         System.out.println("IterativeDeepeningGraphSearch:\t" + search.IterativeDeepeningGraphSearch());
-        
+        System.out.println("TreeSearch------------------------");
+        System.out.println("UniformCostTreeSearch:\t\t" + search.UniformCostTreeSearch());
     }
     
 }
