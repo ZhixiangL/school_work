@@ -59,7 +59,9 @@ public class ProblemPancake extends Problem{
         int size = state.tuple.size();
         int h=0;
         for(int i=0; i<size-1; i++){
-            h += Math.abs(state.tuple.get(i) - state.tuple.get(i+1));
+            if(Math.abs(state.tuple.get(i)-state.tuple.get(i+1))>1){
+                h++;
+            }
         }
         return h;
     }
