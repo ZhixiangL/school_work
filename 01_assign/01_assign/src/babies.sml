@@ -9,8 +9,7 @@ in
   
 fun babies_program (fileName, yearSt) =
     let
-      val _ = print ("Filename to read " ^ fileName ^ "\n")
-      val _ = print ("First year  " ^ yearSt ^ "\n")
+
     in
       let 
         (* preparations *)
@@ -140,7 +139,7 @@ fun babies_program (fileName, yearSt) =
                             else
                               let
                               in
-                                if hd entries > ma
+                                if hd entries >= ma
                                 then max_cal (year+1, year, hd entries, tl entries)
                                 else max_cal (year+1, max_year, ma, tl entries)
                               end
@@ -162,7 +161,7 @@ fun babies_program (fileName, yearSt) =
                     end
                 in
                   if null records
-                  then name^"\nBaby name ["^name^"] was not found \n"
+                  then name^"\nBaby name ["^name^"] was not found\n"
                   else if name = #1 (hd records)
                   then name^"\n"^stats_output(hd records)
                   else one_name_search_and_print(name, tl records)
