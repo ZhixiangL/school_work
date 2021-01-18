@@ -80,13 +80,13 @@ fun babies_program (fileName, yearSt) =
                         in years_cal (#2 record)
                         end
                       
-                      val num2019 = 
+                      val end_year_pair = 
                         let
-                          fun num2019_cal (year: int, entries : int list) : int = 
-                            if year = 2019 
-                            then hd entries
-                            else num2019_cal (year+1, tl entries)
-                        in num2019_cal (valOf (fromString (yearSt)), (#2 record))
+                          fun end_year_cal (year: int, entries : int list) : int*int = 
+                            if null (tl entries)
+                            then (year, hd entries)
+                            else end_year_cal (year+1, tl entries)
+                        in end_year_cal (valOf (fromString (yearSt)), (#2 record))
                         end
                       
                       val first_pair = 
@@ -152,7 +152,7 @@ fun babies_program (fileName, yearSt) =
                     in 
                       " Total: " ^ int_to_string (#3 record) ^ "\n" ^
                       " Years: " ^ int_to_string (years) ^ "\n" ^
-                      " 2019: " ^ int_to_string (num2019) ^ "\n" ^
+                      " " ^ int_to_string (#1 end_year_pair) ^ ": "^ int_to_string (#2 end_year_pair) ^ "\n" ^
                       " First: " ^ int_to_string (#1 first_pair) ^ " " ^ int_to_string (#2 first_pair) ^ "\n" ^
                       " Last: " ^ int_to_string (#1 last_pair) ^ " " ^ int_to_string (#2 last_pair) ^ "\n" ^
                       " Min: " ^ int_to_string (#1 min_pair) ^ " " ^ int_to_string (#2 min_pair) ^ "\n" ^
