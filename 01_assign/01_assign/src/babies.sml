@@ -80,7 +80,7 @@ fun babies_program (fileName, yearSt) =
                         in years_cal (#2 record)
                         end
                       
-                      val end_year_pair = 
+                      val (end_year, end_year_num) = 
                         let
                           fun end_year_cal (year: int, entries : int list) : int*int = 
                             if null (tl entries)
@@ -89,7 +89,7 @@ fun babies_program (fileName, yearSt) =
                         in end_year_cal (valOf (fromString (yearSt)), (#2 record))
                         end
                       
-                      val first_pair = 
+                      val (first_year, first_year_num) = 
                         let
                           fun first_cal (year: int, entries : int list) : int*int = 
                             if hd entries >0
@@ -98,7 +98,7 @@ fun babies_program (fileName, yearSt) =
                         in first_cal (valOf (fromString (yearSt)), (#2 record))
                         end
 
-                      val last_pair = 
+                      val (last_year, last_year_num) = 
                         let
                           fun last_cal (year: int, entries : int list) : int*int = 
                             let
@@ -116,7 +116,7 @@ fun babies_program (fileName, yearSt) =
                         in last_cal (valOf (fromString (yearSt)), (#2 record))
                         end
                       
-                      val min_pair = 
+                      val (min_year, min_year_num) = 
                         let
                           fun min_cal (year : int, min_year : int, mi : int, entries : int list) : int*int = 
                             if null entries
@@ -131,7 +131,7 @@ fun babies_program (fileName, yearSt) =
                         in min_cal (valOf(fromString(yearSt)), valOf(fromString(yearSt)), 0, (#2 record))
                         end
                       
-                      val max_pair = 
+                      val (max_year, max_year_num) = 
                         let
                           fun max_cal (year : int, max_year : int, ma : int, entries : int list) : int*int = 
                             if null entries
@@ -152,11 +152,11 @@ fun babies_program (fileName, yearSt) =
                     in 
                       " Total: " ^ int_to_string (#3 record) ^ "\n" ^
                       " Years: " ^ int_to_string (years) ^ "\n" ^
-                      " " ^ int_to_string (#1 end_year_pair) ^ ": "^ int_to_string (#2 end_year_pair) ^ "\n" ^
-                      " First: " ^ int_to_string (#1 first_pair) ^ " " ^ int_to_string (#2 first_pair) ^ "\n" ^
-                      " Last: " ^ int_to_string (#1 last_pair) ^ " " ^ int_to_string (#2 last_pair) ^ "\n" ^
-                      " Min: " ^ int_to_string (#1 min_pair) ^ " " ^ int_to_string (#2 min_pair) ^ "\n" ^
-                      " Max: " ^ int_to_string (#1 max_pair) ^ " " ^ int_to_string (#2 max_pair) ^ "\n" ^
+                      " " ^ int_to_string (end_year) ^ ": "^ int_to_string (end_year_num) ^ "\n" ^
+                      " First: " ^ int_to_string (first_year) ^ " " ^ int_to_string (first_year_num) ^ "\n" ^
+                      " Last: " ^ int_to_string (last_year) ^ " " ^ int_to_string (last_year_num) ^ "\n" ^
+                      " Min: " ^ int_to_string (min_year) ^ " " ^ int_to_string (min_year_num) ^ "\n" ^
+                      " Max: " ^ int_to_string (max_year) ^ " " ^ int_to_string (max_year_num) ^ "\n" ^
                       " Avg: " ^ real_to_string (avg) ^ "\n"
                     end
                 in
