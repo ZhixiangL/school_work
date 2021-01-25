@@ -31,7 +31,14 @@ fun is_empty_set s =
 fun min_in_set s =
     case s of
         EmptySet _ => raise SetIsEmpty
-      | Set (xs, _) => hd xs
+      | Set (xs, _) => 
+            let
+                fun get_first li =
+                    case li of
+                        [] => raise SetIsEmpty
+                      | y::ys => y
+            in get_first xs
+            end 
 
 fun max_in_set s =
     case s of
@@ -40,7 +47,8 @@ fun max_in_set s =
             let
                 fun get_last li =
                     case li of
-                        y::[] => y
+                        [] => raise SetIsEmpty
+                      | y::[] => y
                       | y::ys => get_last ys
             in get_last xs
             end  
@@ -73,40 +81,49 @@ fun in_set(s, v) =
                       | y::ys => 
                             if comp(v,y) = EQUAL
                             then true
-                            else if comp (v, y) = GREATER
+                            else if comp (v, y) = LESS
                             then false
                             else in_test ys
-            in insert xs
+            in in_test xs
             end  
 
 fun union_set(s, t) =
-    let
-        fun aux (xs, acc) = 
-            case xs of
-                EmptySet _ => acc
-              | Set (y::ys, comp) => aux (ys, insert_into_set(acc, y))
-    in aux (s, t)
-    end
+    case s of
+        EmptySet _ => t
+      | Set (xs, comp) =>
+            let
+                fun aux (xs, acc) = 
+                    case xs of
+                        [] => acc
+                      | y::ys => aux (ys, insert_into_set(acc, y))
+            in aux (xs, t)
+            end
 
 fun intersect_set(s, t) =
-    let
-
-        fun aux (s, t, acc) = 
-            case s of
-                EmptySet _ => acc
-              | Set (y::ys, comp) => if in_set(t, y) then aux (ys, t, insert_into_set(acc, y)) else aux (ys, t, acc)
-    in aux (s, t, EmptySet (case s of EmptySet comp => comp | Set (_, comp) => comp))
-    end
+    case s of
+        EmptySet _ => s
+      | Set (xs, comp) =>
+            let
+                fun aux (xs, acc) = 
+                    case xs of
+                        [] => acc
+                      | y::ys => if in_set(t, y) then aux (ys, insert_into_set(acc, y)) else aux (ys, acc)
+                   
+            in aux (xs, EmptySet comp)
+            end
 
 fun except_set(s, t) =
-    let
+    case s of
+        EmptySet _ => s
+      | Set (xs, comp) =>
+            let
+                fun aux (xs, t, acc) = 
+                    case xs of
+                        [] => acc
+                      | y::ys => if in_set(t, y) then aux (ys, t, acc) else aux (ys, t, insert_into_set(acc, y))
+            in aux (xs, t, EmptySet (case s of EmptySet comp => comp | Set (_, comp) => comp))
+            end
 
-        fun aux (s, t, acc) = 
-            case s of
-                EmptySet _ => acc
-              | Set (y::ys, comp) => if in_set(t, y) then aux (ys, t, acc) else aux (ys, t, insert_into_set(acc, y))
-    in aux (s, t, EmptySet (case s of EmptySet comp => comp | Set (_, comp) => comp))
-    end
 
 fun remove_from_set(s,v) =
     case s of
@@ -140,6 +157,7 @@ fun size_set(s: 'a set) =
 fun equal_set(s, t) =
     case except_set(s, t) of
         EmptySet _ => size_set(s) = size_set(t)
+      | Set ([], _) => size_set(s) = size_set(t)
       | _ => false
 
 fun is_subset_of(s, t) =
@@ -152,24 +170,25 @@ fun list_to_set(lst, f) =
         fun insert_list (li, acc) = 
             case li of 
                 [] => acc
-                x::xs => insert_list(xs, insert_into_set(acc, x))
+              | x::xs => insert_list(xs, insert_into_set(acc, x))
     in insert_list (lst, EmptySet f)
     end
 
 fun set_to_list s =
     case s of
         EmptySet _ => []
-        Set (xs, _) => xs
+      | Set (xs, _) => xs
 
 fun str_set (s, fstr) =
     case s of
         EmptySet _ => "{}"
-        Set (xs, _) => 
+      | Set (xs, _) => 
             let
                 fun str_lst li =
                     case li of
-                        x::[] => fstr(x)
-                        x::xs => fstr(x)^":"^str_lst xs
+                        [] => "{}"
+                      | x::[] => fstr(x)
+                      | x::xs => fstr(x)^":"^str_lst xs
             in "{"^str_lst xs^"}"
             end
       
@@ -181,7 +200,7 @@ fun map_set (s, fcomp, f) =
                 fun map_list (li, acc) =
                     case li of
                         [] => acc
-                      | y::ys => map_list(ys, insert_into_set(acc, f(y))
+                      | y::ys => map_list(ys, insert_into_set(acc, f y))
             in map_list (xs, EmptySet fcomp)
             end 
 
@@ -196,7 +215,14 @@ fun s IS_SUBSET_OF t = is_subset_of (s, t)
 
 
 fun comp_list_any (a: 'a list, b: 'a list, fcomp : ('a * 'a) -> order) =
-    
+    let 
+        fun list_compare (lst1, lst2) =
+            case lst1 of
+                [] => (case lst2 of [] => EQUAL | _ => LESS)
+              | x::xs => (case lst2 of [] => GREATER | y::ys => if fcomp(x,y)=EQUAL then list_compare(xs, ys) else fcomp(x,y) )
+    in
+        list_compare(a, b)
+    end
                           
 end
 end    
