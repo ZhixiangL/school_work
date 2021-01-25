@@ -26,19 +26,14 @@ infix 9 --
 fun is_empty_set s =
     case s of
         EmptySet _ => true
-      | Set _ => false 
+      | Set ([], _) => true
+      | _ => false 
 
 fun min_in_set s =
     case s of
         EmptySet _ => raise SetIsEmpty
-      | Set (xs, _) => 
-            let
-                fun get_first li =
-                    case li of
-                        [] => raise SetIsEmpty
-                      | y::ys => y
-            in get_first xs
-            end 
+      | Set ([], _) => raise SetIsEmpty 
+      | Set (y::ys, _) => y
 
 fun max_in_set s =
     case s of
@@ -107,7 +102,10 @@ fun intersect_set(s, t) =
                 fun aux (xs, acc) = 
                     case xs of
                         [] => acc
-                      | y::ys => if in_set(t, y) then aux (ys, insert_into_set(acc, y)) else aux (ys, acc)
+                      | y::ys => 
+                            if in_set(t, y) 
+                            then aux (ys, insert_into_set(acc, y)) 
+                            else aux (ys, acc)
                    
             in aux (xs, EmptySet comp)
             end
@@ -120,14 +118,17 @@ fun except_set(s, t) =
                 fun aux (xs, t, acc) = 
                     case xs of
                         [] => acc
-                      | y::ys => if in_set(t, y) then aux (ys, t, acc) else aux (ys, t, insert_into_set(acc, y))
-            in aux (xs, t, EmptySet (case s of EmptySet comp => comp | Set (_, comp) => comp))
+                      | y::ys => 
+                            if in_set(t, y) 
+                            then aux (ys, t, acc) 
+                            else aux (ys, t, insert_into_set(acc, y))
+            in aux (xs, t, EmptySet comp)
             end
 
 
 fun remove_from_set(s,v) =
     case s of
-        EmptySet comp => s
+        EmptySet _ => s
       | Set (xs, comp) => 
             let
                 fun remove li =
@@ -157,7 +158,6 @@ fun size_set(s: 'a set) =
 fun equal_set(s, t) =
     case except_set(s, t) of
         EmptySet _ => size_set(s) = size_set(t)
-      | Set ([], _) => size_set(s) = size_set(t)
       | _ => false
 
 fun is_subset_of(s, t) =
@@ -186,7 +186,7 @@ fun str_set (s, fstr) =
             let
                 fun str_lst li =
                     case li of
-                        [] => "{}"
+                        [] => ""
                       | x::[] => fstr(x)
                       | x::xs => fstr(x)^":"^str_lst xs
             in "{"^str_lst xs^"}"
@@ -217,9 +217,14 @@ fun s IS_SUBSET_OF t = is_subset_of (s, t)
 fun comp_list_any (a: 'a list, b: 'a list, fcomp : ('a * 'a) -> order) =
     let 
         fun list_compare (lst1, lst2) =
-            case lst1 of
-                [] => (case lst2 of [] => EQUAL | _ => LESS)
-              | x::xs => (case lst2 of [] => GREATER | y::ys => if fcomp(x,y)=EQUAL then list_compare(xs, ys) else fcomp(x,y) )
+            case (lst1, lst2) of
+                ([], []) => EQUAL
+              | ([], _) => LESS
+              |  (_, []) => GREATER
+              | (x::xs, y::ys) => 
+                    if fcomp(x,y)=EQUAL 
+                    then list_compare(xs, ys) 
+                    else fcomp(x,y)
     in
         list_compare(a, b)
     end
