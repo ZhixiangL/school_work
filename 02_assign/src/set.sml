@@ -53,16 +53,28 @@ fun insert_into_set(s,v) =
         EmptySet comp => Set (v::[], comp)
       | Set (xs, comp) => 
             let
-                fun insert li =
-                    case li of
-                        [] => v::[]
+                fun reverse (xs) = 
+                    let
+                        fun aux(lst, acc) = case lst of [] =>acc | head::tail => aux(tail, head::acc)
+                    in
+                        aux(xs, [])
+                    end
+                fun combine (lst1, lst2) = 
+                    let
+                        fun aux(lst, acc) = case lst of [] =>acc | head::tail => aux(tail, head::acc)
+                    in
+                        aux(lst1, lst2)
+                    end
+                fun insert (part1, part2) =
+                    case part2 of
+                        [] => reverse(v::part1)
                       | y::ys => 
                             if comp (v, y) = LESS
-                            then v::li
+                            then combine(part1,v::part2)
                             else if comp (v, y) =EQUAL
-                            then li
-                            else y::(insert ys)
-            in Set (insert xs, comp)
+                            then xs
+                            else insert(y::part1,ys)
+            in Set (insert ([], xs), comp)
             end  
 
 fun in_set(s, v) =
@@ -211,6 +223,7 @@ fun s UNION t = union_set (s, t)
 fun s INTERSECT t = intersect_set (s, t)
 fun s EXCEPT t = except_set (s, t)
 fun v IN s = in_set (s, v)
+fun s CONTAINS v = in_set(s,v)
 fun s IS_SUBSET_OF t = is_subset_of (s, t)
 
 
