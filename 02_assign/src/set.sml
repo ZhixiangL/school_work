@@ -51,17 +51,18 @@ fun max_in_set s =
 fun insert_into_set(s,v) =
     case s of
         EmptySet comp => Set (v::[], comp)
+      | Set ([], comp) => Set (v::[], comp)
       | Set (xs, comp) => 
             let
                 fun reverse (xs) = 
                     let
-                        fun aux(lst, acc) = case lst of [] =>acc | head::tail => aux(tail, head::acc)
+                        fun aux(lst, acc) = case lst of [] =>Set(acc,comp) | head::tail => aux(tail, head::acc)
                     in
                         aux(xs, [])
                     end
                 fun combine (lst1, lst2) = 
                     let
-                        fun aux(lst, acc) = case lst of [] =>acc | head::tail => aux(tail, head::acc)
+                        fun aux(lst, acc) = case lst of [] =>Set(acc, comp) | head::tail => aux(tail, head::acc)
                     in
                         aux(lst1, lst2)
                     end
@@ -72,9 +73,9 @@ fun insert_into_set(s,v) =
                             if comp (v, y) = LESS
                             then combine(part1,v::part2)
                             else if comp (v, y) =EQUAL
-                            then xs
+                            then s
                             else insert(y::part1,ys)
-            in Set (insert ([], xs), comp)
+            in insert ([], xs)
             end  
 
 fun in_set(s, v) =
