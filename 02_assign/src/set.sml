@@ -1,6 +1,6 @@
 (*
-Your name:
-Your student id:
+Your name: Zhixiang Li
+Your student id: V00906200
 *)
 
 structure Set =
