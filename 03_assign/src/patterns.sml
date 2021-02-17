@@ -118,6 +118,7 @@ fun append (lst1, lst2) =
 fun all_answers f lst =
     case lst of
         [] => SOME []
+      | x::[] => (case f(x) of SOME v => SOME v | NONE=>NONE)
       | x::xs => 
           case f(x) of 
               SOME v => (case (all_answers f xs) of NONE => NONE | SOME lst1 => SOME (append(v, lst1)))
@@ -161,7 +162,9 @@ fun match (v, p) :(string * value) list option=
 fun first_match v pattern_list =
     case pattern_list of
         [] => NONE
-      | p::ps => case match(v,p) of NONE => (first_match v ps) | SOME x => SOME x
+      | ps => SOME (first_answer (fn pa => match(v,pa)) ps) handle NoAnswer => NONE
+      (* case match(v,p) of NONE => (first_match v ps) | SOME x => SOME x *)
+      
 (* leave the following functions untouched *)
 
 fun tree_root t =
