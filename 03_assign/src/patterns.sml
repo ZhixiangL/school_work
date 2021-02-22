@@ -52,41 +52,45 @@ fun tree_fold_pre_order f acc t =
         emptyTree => acc
       | nodeTree(va, left, right) => tree_fold_pre_order f (tree_fold_pre_order f (f(acc, va)) left) right
 
-val tree_max = fn t =>
-    case t of 
-        emptyTree => NONE
-      | nodeTree _ => SOME (tree_fold_pre_order (fn (acc, v)=> if acc<v then v else acc) 0 t)
+val tree_max = 
+      tree_fold_pre_order (
+          fn (acc, v)=>
+            case acc of 
+                NONE => SOME v
+              | SOME va => if va<=v then SOME v else acc
+      ) NONE
     
 
 fun tree_delete (t, v) = 
     case t of 
         emptyTree => raise NotFound
-      | nodeTree (va, emptyTree, right) => right
-      | nodeTree (va, left, emptyTree) => left
+      | nodeTree (va, emptyTree, right) => 
+            if va=v 
+            then right 
+            else if v<va 
+            then raise NotFound 
+            else nodeTree (va, emptyTree, tree_delete(right, v))
+      | nodeTree (va, left, emptyTree) => 
+            if va=v 
+            then left 
+            else if v>va 
+            then raise NotFound 
+            else nodeTree (va, tree_delete(left, v), emptyTree)
       | nodeTree (va, left, right) => 
-          let
-          in
-              if v=va
-              then 
-                  let val left_max = case (tree_max left) of NONE => 0 | SOME x=>x
-                  in nodeTree (left_max, tree_delete(left, left_max), right)
-                  end
-              else if v<va
-              then nodeTree (va, tree_delete(left, v), right)
-              else nodeTree (va, left, tree_delete(right, v))
-          end
+            if v=va
+            then 
+                let val left_max = case (tree_max left) of NONE => 0 | SOME x=>x
+                in nodeTree (left_max, tree_delete(left, left_max), right)
+                end
+            else if v<va
+            then nodeTree (va, tree_delete(left, v), right)
+            else nodeTree (va, left, tree_delete(right, v))
+      
 
 
 
-val tree_to_list = fn t => 
-    let
-        fun reverse (lst, acc) = 
-            case lst of
-                [] => acc
-              | x::xs => reverse(xs,x::acc)
-    in
-        reverse((tree_fold_pre_order (fn (acc, v)=>v::acc) [] t),[])
-    end
+val tree_to_list = tree_fold_pre_order (fn (acc, v)=>acc@[v]) []
+   
 
 fun tree_filter f t =
     case t of 
@@ -146,15 +150,15 @@ fun check_pattern p =
         list_is_not_repeat(pattern_variables p)
     end
 
-fun match (v, p) :(string * value) list option= 
+fun match (v, p) = 
     case (p, v) of
-        (Variable s, v1) => (SOME ((s, v1)::[]))
+        (Wildcard, _) => SOME []
+      | (Variable s, v1) => (SOME ((s, v1)::[]))
       | (UnitP, Unit) => SOME []
       | (ConstP i, Const j) => if i=j then SOME [] else NONE
       | (TupleP ps, Tuple vs) => 
           if List.length(ps)=List.length(vs) then (all_answers match (ListPair.zip(vs, ps))) else NONE
       | (ConstructorP (s1, p1), Constructor(s2, v1)) => if s1=s2 then match(v1,p1) else NONE
-      | (Wildcard, _) => SOME []
       | _ => NONE
 
 
@@ -163,7 +167,6 @@ fun first_match v pattern_list =
     case pattern_list of
         [] => NONE
       | ps => SOME (first_answer (fn pa => match(v,pa)) ps) handle NoAnswer => NONE
-      (* case match(v,p) of NONE => (first_match v ps) | SOME x => SOME x *)
       
 (* leave the following functions untouched *)
 
