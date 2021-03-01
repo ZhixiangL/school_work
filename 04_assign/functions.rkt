@@ -35,7 +35,10 @@
 
 ;#3
 (define add-pointwise-lists-2 
-  #f)
+  (lambda (xs)
+    (if (list? xs)
+      (foldl add-pointwise null xs)
+      (error "illegal parameter"))))
 
 ;#4
 (define stream-for-n-steps 
