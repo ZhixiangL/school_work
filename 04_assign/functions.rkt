@@ -27,9 +27,11 @@
 ;#2
 (define add-pointwise-lists 
   (lambda (xs) 
-    (if (null? (cdr xs))
-        (car xs)
-        (add-pointwise (car xs) (add-pointwise-lists (cdr xs))))))
+    (if (and (list? xs) (list? (car xs)))
+      (if (null? (cdr xs))
+          (car xs)
+          (add-pointwise (car xs) (add-pointwise-lists (cdr xs))))
+      (error "illegal parameter"))))
 
 ;#3
 (define add-pointwise-lists-2 
@@ -81,7 +83,28 @@
 ; part 2
 
 ;#1
-(define vector-assoc #f)
+(define vector-assoc 
+  (lambda (v vec) 
+    (letrec 
+        ( [len (vector-length vec)]
+          [f (lambda (i) 
+            (if (< i len)
+                (if (and (pair? (vector-ref vec i)) (equal? v (car (vector-ref vec i)))) (vector-ref vec i) (f (+ i 1))  )
+                #f ))]) 
+        (f 0)  )))
 
 ;#2
-(define cached-assoc #f)
+(define cached-assoc 
+  (lambda (xs n) 
+    (letrec 
+        ([cache (make-vector n #f)]
+         [pos 0]
+         [f (lambda (v) 
+            (letrec ([cache-check (vector-assoc v cache)]) 
+                (if (equal? cache-check #f) 
+                    (letrec ([list-check (assoc v xs)]) 
+                        (if (equal? list-check #f) 
+                            #f 
+                            (begin (vector-set! cache  pos list-check) (set! pos (remainder (+ pos 1) n )) list-check)  )) 
+                    cache-check )))  ]) 
+        (lambda (v) (f v))   )))
