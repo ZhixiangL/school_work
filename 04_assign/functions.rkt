@@ -83,7 +83,7 @@
           ( [func fu] 
             [f (lambda (x)
                 (cons (func x) (lambda () (f (+ x delta)))))])
-        (lambda () (f i0)) )   )   ]))
+        (lambda () (f i0)))   )]))
 ; part 2
 
 ;#1
