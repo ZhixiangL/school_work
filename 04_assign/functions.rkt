@@ -26,12 +26,13 @@
 
 ;#2
 (define add-pointwise-lists 
-  (lambda (xs) 
-    (if (and (list? xs) (list? (car xs)))
-      (if (null? (cdr xs))
-          (car xs)
-          (add-pointwise (car xs) (add-pointwise-lists (cdr xs))))
-      (error "illegal parameter"))))
+  (lambda (xs)
+    (if (null? xs) null
+      (if (and (list? xs) (list? (car xs)))
+        (if (null? (cdr xs))
+            (car xs)
+            (add-pointwise (car xs) (add-pointwise-lists (cdr xs))))
+        (error "illegal parameter")) )  ))
 
 ;#3
 (define add-pointwise-lists-2 
@@ -42,9 +43,9 @@
 
 ;#4
 (define stream-for-n-steps 
-  (lambda (stream n)
+  (lambda (Stream n)
     (if (> n 0)
-      (cons (car (stream)) (stream-for-n-steps (cdr (stream)) (- n 1)))
+      (let ([stream (Stream)]) (cons (car stream) (stream-for-n-steps (cdr stream) (- n 1))))
       null)))
 
 ;#5
@@ -73,16 +74,16 @@
           (equal? li (reverse li)))  )])
       (filter-stream pal nat-num-stream)))
 
-;#8 macro create-stream
+;#8
 (define-syntax create-stream 
   (syntax-rules (using starting at with increment)
     [(create-stream name using fu starting at i0 with increment delta) 
      (define name 
         (letrec
-          ( [func fu]
+          ( [func fu] 
             [f (lambda (x)
                 (cons (func x) (lambda () (f (+ x delta)))))])
-        (lambda () (f i0)))   )]))
+        (lambda () (f i0)) )   )   ]))
 ; part 2
 
 ;#1
