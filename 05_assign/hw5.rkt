@@ -147,9 +147,6 @@
 
 (define mupl-mapAddN
   (mlet "map" mupl-map
-    (fun "mupl-map" "f" 
+    (fun "mupl-map" "i" 
       (fun #f "lst" 
-          (ifaunit (var "lst") (aunit) 
-              (apair  
-                  (add (var "f") (fst (var "lst"))) 
-                  (call (call (var "mupl-map") (var "f")) (snd (var "lst"))) )) ))))
+          (call (call (var "map") (fun #f "x" (add (var "i") (var "x")))) (var "lst")) ))))
