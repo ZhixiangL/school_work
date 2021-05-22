@@ -1,0 +1,45 @@
+Welcome to
+
+  ActiveTcl Community Edition for Linux/x86_64
+
+Supported Packages:
+
+	Tcl	8.6	Thread	2.7.3
+	Tk	8.6	trofs	0.4.9
+
+Extra Packages:
+
+ Tk 8.6.9.1 
+ zlib 1.2.11 
+ libiconv 1.15 
+ openssl 1.10.0.10 
+ tcllib 1.18 
+ bzip2 1.0.6 
+ libxml2 2.9.8 
+ tls 1.7.16 
+ tdom 0.8.3 
+ Trf 2.1.4 
+ itk 4.1.0 
+ libxslt 1.1.32 
+ trofs 0.4.9 
+ tkblt 3.2.8 
+ snack 2.2.10 
+ expect 5.45.3 
+ critcl 3.1.17 
+ TclSOAP 1.6.8.1 
+ tkcon 2.7 
+ bwidget 1.9.11 
+ iwidgets 4.1.1 
+ tclx 8.4.1 
+ tklib 0.6.1 
+ tktable 2.11 
+ tclvfs 1.4.2 
+ metakit 2.4.9.7.1 
+ tbcload 1.7.1 
+ Img 1.4.6 
+ treectrl 2.4.1 
+ wub 5.0.0 
+ nsf 2.2.0 
+ sqlite3 3.20.1 
+ tclxml 3.2 
+
