@@ -1,0 +1,14 @@
+void main () {
+	int x;
+	int y;
+	int a;
+	int b;
+	int c;
+	int d;
+
+	x = 12;
+	y = 22;
+
+	println a + b + c + d;
+	println x - y + x * y;
+}

@@ -1,0 +1,10 @@
+void foo(int n) {
+    if (true) {
+        if(true) {
+            
+        }
+    }
+    else {
+        x = f() + f();
+    }
+}
