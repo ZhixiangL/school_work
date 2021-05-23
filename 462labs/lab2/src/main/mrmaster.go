@@ -20,7 +20,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	m := mr.MakeMaster(os.Args[1:], 2)
+	m := mr.MakeMaster(os.Args[1:], 5)
 	for m.Done() == false {
 		time.Sleep(time.Second)
 	}
