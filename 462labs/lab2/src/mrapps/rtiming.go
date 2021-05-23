@@ -76,6 +76,7 @@ func Map(filename string, contents string) []mr.KeyValue {
 }
 
 func Reduce(key string, values []string) string {
+
 	n := nparallel("reduce")
 
 	val := fmt.Sprintf("%d", n)

@@ -15,14 +15,18 @@ import "strconv"
 //
 
 type Args struct {
-	lastFileId int
+	LastFileId int
+	LastReduceId int
 }
 
 type Reply struct {
-	fileName string
-	fileId int
-	workerId int
-	stop bool 
+	FileName string
+	FileId int
+	MapStop bool
+	Stop bool 
+	NReduceId int
+	NReduce int
+	Wait bool
 }
 
 // Add your RPC definitions here.

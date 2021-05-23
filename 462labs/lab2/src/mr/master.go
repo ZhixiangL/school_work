@@ -5,13 +5,19 @@ import "net"
 import "os"
 import "net/rpc"
 import "net/http"
-
+import "time"
+//import "fmt"
 
 type Master struct {
 	// Your definitions here.
-	pointer int
-	files string[]
+	files []string
+	fileStatus []int
+	reduceId int
+	nReduceStatus []int
+	countDown []time.Time
 	nReduce int
+	mapDone bool
+	reduceDone bool 
 }
 
 // Your code here -- RPC handlers for the worker to call.
@@ -21,8 +27,95 @@ type Master struct {
 //
 // the RPC argument and reply types are defined in rpc.go.
 //
+func (m *Master) allFilesMapped() bool {
+	ret := true
+	for _, v := range m.fileStatus {
+		if v!= 2 {
+			return false
+		}
+	} 
+	return ret
+}
+
+func (m *Master) allReducesDone() bool {
+	ret := true
+	for _, v := range m.nReduceStatus {
+		if v!= 2 {
+			return false
+		}
+	} 
+	return ret
+}
+
+func (m *Master) assignNReduce(reply *Reply) {
+	for i := 0; i < m.nReduce; i++ {
+		if (m.nReduceStatus[i]==0) || (m.nReduceStatus[i]==1 && m.countDown[i].Add(10*time.Second).Before(time.Now())) {
+			m.nReduceStatus[i] = 1
+			m.countDown[i] = time.Now()
+			reply.NReduceId = i
+			return 
+		}
+	}
+	if !m.reduceDone {
+		reply.Wait = true
+	} else {
+		reply.Stop = true
+	}
+}
+
+func (m *Master) assignMap(reply *Reply) {
+	for i, file := range m.files {
+		if (m.fileStatus[i]==0) || (m.fileStatus[i]==1 && m.countDown[i].Add(10*time.Second).Before(time.Now())) {
+			m.fileStatus[i] = 1
+			m.countDown[i] = time.Now()
+			reply.FileName = file
+			reply.FileId = i
+			reply.Stop = false
+			reply.NReduce = m.nReduce
+			return
+		}
+	}
+	if !m.mapDone {
+		reply.Wait = true
+	} else {
+		reply.MapStop = true
+		m.assignNReduce(reply)
+	}
+}
+
 func (m *Master) Example(args *Args, reply *Reply) error {
-	reply.Y = args.X + 1
+	if args.LastFileId == -1 && !m.mapDone {
+		m.assignMap(reply)
+
+	} else if !m.mapDone {
+		m.fileStatus[args.LastFileId] = 2
+		if m.allFilesMapped() {
+			m.mapDone = true
+			reply.MapStop = true
+			m.countDown = make([]time.Time, m.nReduce)
+			m.assignNReduce(reply)
+			return nil
+		}
+		m.assignMap(reply)
+	} else if !m.reduceDone {
+		// if args.LastReduceId == m.nReduce -1 {
+		// 	m.reduceDone = true
+		// 	reply.Stop = true
+		// 	return nil
+		if (args.LastReduceId != -1) {
+			m.nReduceStatus[args.LastReduceId] = 2
+			if m.allReducesDone(){
+				m.reduceDone = true
+				return nil
+			}
+		}
+		m.assignNReduce(reply)
+
+
+	} else {
+		reply.Stop = true
+	}
+
 	return nil
 }
 
@@ -48,10 +141,18 @@ func (m *Master) server() {
 // if the entire job has finished.
 //
 func (m *Master) Done() bool {
-	ret := false
 
-	// Your code here.
-
+	ret := true
+	for _, v := range m.fileStatus {
+		if v!= 2 {
+			return false
+		}
+	} 
+	for _, v := range m.nReduceStatus {
+		if v!= 2 {
+			return false
+		}
+	} 
 
 	return ret
 }
@@ -65,9 +166,15 @@ func MakeMaster(files []string, nReduce int) *Master {
 	m := Master{}
 
 	// Your code here.
-	m.files = files
-	m.pointer = 0
+	m.files = make([]string, len(files))
+	copy(m.files, files)
+	m.fileStatus = make([]int, len(files))
+	m.nReduceStatus = make([]int, nReduce)
+	m.countDown = make([]time.Time, len(files))
 	m.nReduce = nReduce
+	m.reduceId = 0
+	m.mapDone = false
+	m.reduceDone = false
 
 	m.server()
 	return &m
