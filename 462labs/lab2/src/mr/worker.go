@@ -46,10 +46,10 @@ func ihash(key string) int {
 func Worker(mapf func(string, string) []KeyValue,
 	reducef func(string, []string) string) {
 	//map part
-	reply :=Call(-1, -1)
+	reply :=Call(-1, -1, -1)
 	for reply.Wait {
 		time.Sleep(2*time.Second)
-		reply = Call(-1, -1)
+		reply = Call(-1, -1, -1)
 	}
 	var filename string
 	var id int = -1
@@ -82,10 +82,10 @@ func Worker(mapf func(string, string) []KeyValue,
 				enc := json.NewEncoder(files[bucket])
 				enc.Encode(&ele)
 			}
-			reply = Call(lastFileId, -1)
+			reply = Call(lastFileId, -1, id)
 			for reply.Wait {
 				time.Sleep(2*time.Second)
-				reply = Call(lastFileId, -1)
+				reply = Call(lastFileId, -1, id)
 			}
 			
 		}
@@ -142,10 +142,10 @@ func Worker(mapf func(string, string) []KeyValue,
 		}
 		ofile.Close()
 
-		reply = Call(0, lastReduceId)
+		reply = Call(0, lastReduceId, id)
 		for reply.Wait {
 			time.Sleep(2*time.Second)
-			reply = Call(0, lastReduceId)
+			reply = Call(0, lastReduceId, id)
 		}
 		filename = reply.FileName
 		lastReduceId = reply.NReduceId
@@ -164,11 +164,12 @@ func Worker(mapf func(string, string) []KeyValue,
 //
 // the RPC argument and reply types are defined in rpc.go.
 //
-func Call(lastFileId int, lastReduceId int) Reply{
+func Call(lastFileId int, lastReduceId int, id int) Reply{
 
 	args := Args{}
 	args.LastFileId = lastFileId
 	args.LastReduceId = lastReduceId
+	args.Id = id
 	// declare a reply structure.
 	reply := Reply{}
 

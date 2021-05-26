@@ -17,6 +17,7 @@ import "strconv"
 type Args struct {
 	LastFileId int
 	LastReduceId int
+	Id int
 }
 
 type Reply struct {
