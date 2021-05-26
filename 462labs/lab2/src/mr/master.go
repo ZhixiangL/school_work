@@ -18,6 +18,7 @@ type Master struct {
 	nReduce int
 	mapDone bool
 	reduceDone bool 
+	mapId int
 }
 
 // Your code here -- RPC handlers for the worker to call.
@@ -53,11 +54,13 @@ func (m *Master) assignNReduce(reply *Reply) {
 			m.nReduceStatus[i] = 1
 			m.countDown[i] = time.Now()
 			reply.NReduceId = i
+			reply.MapStop = true
 			return 
 		}
 	}
 	if !m.reduceDone {
 		reply.Wait = true
+		reply.MapStop = true
 	} else {
 		reply.Stop = true
 	}
@@ -66,12 +69,13 @@ func (m *Master) assignNReduce(reply *Reply) {
 func (m *Master) assignMap(reply *Reply) {
 	for i, file := range m.files {
 		if (m.fileStatus[i]==0) || (m.fileStatus[i]==1 && m.countDown[i].Add(10*time.Second).Before(time.Now())) {
-			m.fileStatus[i] = 1
 			m.countDown[i] = time.Now()
+			m.fileStatus[i] = 1
 			reply.FileName = file
 			reply.FileId = i
-			reply.Stop = false
 			reply.NReduce = m.nReduce
+			reply.MapId = m.mapId
+			m.mapId += 1
 			return
 		}
 	}
@@ -86,9 +90,10 @@ func (m *Master) assignMap(reply *Reply) {
 func (m *Master) Example(args *Args, reply *Reply) error {
 	if args.LastFileId == -1 && !m.mapDone {
 		m.assignMap(reply)
-
 	} else if !m.mapDone {
-		m.fileStatus[args.LastFileId] = 2
+		if m.fileStatus[args.LastFileId] != 2  {
+			m.fileStatus[args.LastFileId] = 2
+		}
 		if m.allFilesMapped() {
 			m.mapDone = true
 			reply.MapStop = true
@@ -98,10 +103,6 @@ func (m *Master) Example(args *Args, reply *Reply) error {
 		}
 		m.assignMap(reply)
 	} else if !m.reduceDone {
-		// if args.LastReduceId == m.nReduce -1 {
-		// 	m.reduceDone = true
-		// 	reply.Stop = true
-		// 	return nil
 		if (args.LastReduceId != -1) {
 			m.nReduceStatus[args.LastReduceId] = 2
 			if m.allReducesDone(){
@@ -171,10 +172,14 @@ func MakeMaster(files []string, nReduce int) *Master {
 	m.fileStatus = make([]int, len(files))
 	m.nReduceStatus = make([]int, nReduce)
 	m.countDown = make([]time.Time, len(files))
+	for i, _ := range m.countDown {
+		m.countDown[i] = time.Now().Add(1*time.Hour)
+	}
 	m.nReduce = nReduce
 	m.reduceId = 0
 	m.mapDone = false
 	m.reduceDone = false
+	m.mapId = 0
 
 	m.server()
 	return &m
