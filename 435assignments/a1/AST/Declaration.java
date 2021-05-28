@@ -1,19 +1,11 @@
 package AST;
 
 public class Declaration extends ASTNode {
-    private Type tn;
-    private Identifier id;
+    public TypeNode type;
+    public Identifier id;
 
-    public Declaration (Type t, Identifier i) {
-        this.tn = t;
+    public Declaration (TypeNode t, Identifier i) {
+        this.type = t;
         this.id = i;
-    }
-
-    public Type getType() {
-        return this.tn;
-    }
-
-    public Identifier getIdentifier() {
-        return this.id;
-    }    
+    } 
 }

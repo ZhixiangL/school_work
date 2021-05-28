@@ -1,19 +1,12 @@
 package AST;
 
 public class ArrayAssignmentStatement extends Statement {
-    private Expression expr;
-    private ArrayReference ar;
+    public Expression expr;
+    public ArrayReference arrayReference;
 
     public ArrayAssignmentStatement(ArrayReference a, Expression e){
-        this.ar = a;
+        this.arrayReference = a;
         this.expr = e;
     }
 
-    public Expression getExpression() {
-        return this.expr;
-    }
-
-    public Block getArrayReference(){
-        return this.ar;
-    }
 }

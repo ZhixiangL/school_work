@@ -1,20 +1,11 @@
 package AST;
 
 public class Function extends ASTNode {
-    private FunctionDecl fd;
-    private FunctionBody fb;
+    public FunctionDecl functionDecl;
+    public FunctionBody functionBody;
 
     public Function (FunctionDecl fd, FunctionBody fb){
-        this.fd = fd;
-        this.fb = fb;
+        this.functionDecl = fd;
+        this.functionBody = fb;
     }
-
-    public FunctionDecl getFunctionDecl() {
-        return this.fd;
-    }
-
-    public FunctionBody getFunctionBody() {
-        return this.fb;
-    }
-
 }

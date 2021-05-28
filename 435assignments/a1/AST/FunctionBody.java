@@ -3,27 +3,19 @@ package AST;
 import java.util.ArrayList;
 
 public class FunctionBody extends ASTNode {
-    private ArrayList<VariableDeclaration> vds;
-    private ArrayList<Statement> stats;
+    public ArrayList<VariableDeclaration> variableDeclarationArray;
+    public ArrayList<Statement> statementArray;
 
     public FunctionBody() {
-        this.vds = new ArrayList<VariableDeclaration>();
-        this.stats = new ArrayList<Statement>();
-    }
-
-    public ArrayList<VariableDeclaration> getVariableDeclarations() {
-        return this.vds;
-    }
-
-    public ArrayList<Statement> getStatements() {
-        return this.stats;
+        this.variableDeclarationArray = new ArrayList<VariableDeclaration>();
+        this.statementArray = new ArrayList<Statement>();
     }
 
     public void addVarDecl(VariableDeclaration v) {
-        this.vds.add(v);
+        this.variableDeclarationArray.add(v);
     }
 
     public void addStatement(Statement s) {
-        this.stats.add(s);
+        this.statementArray.add(s);
     }
 }

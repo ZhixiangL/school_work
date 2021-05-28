@@ -3,25 +3,21 @@ package AST;
 import java.util.ArrayList;
 
 public class FormalParameters extends ASTNode {
-    private ArrayList<Declaration> fp;
-    private int size;
+    public ArrayList<Declaration> parameterArray;
+    public int size;
 
     public FormalParameters() {
-        this.fp = new ArrayList<Declaration>();
+        this.parameterArray = new ArrayList<Declaration>();
         size = 0;
     }
 
-    public ArrayList<Declaration> getParameterArray() {
-        return this.fp;
-    }
-
     public void add(Declaration d) {
-        this.fp.add(d);
+        this.parameterArray.add(d);
         size++;
     }
 
     public Declaration get(int index) {
-        return this.fp.get(index);
+        return this.parameterArray.get(index);
     }
 
     public int size() {

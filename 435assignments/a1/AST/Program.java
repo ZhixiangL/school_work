@@ -3,8 +3,8 @@ package AST;
 import java.util.ArrayList;
 
 public class Program extends ASTNode {
-    private ArrayList<Function> funcList;
-    private int size;
+    public ArrayList<Function> funcList;
+    public int size;
 
     public Program (){
         funcList = new ArrayList<Function>();
@@ -17,11 +17,10 @@ public class Program extends ASTNode {
     }
 
     public Function get(int index) {
-        this.funcList.get(index);
+        return this.funcList.get(index);
     }
 
     public int size() {
         return this.size;
     }
-
 }

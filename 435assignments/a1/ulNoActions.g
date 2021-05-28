@@ -6,48 +6,8 @@ options {
 
 @header
 {
-    import AST.AddExpression;
-    import AST.ArrayAssignmentStatement;
-    import AST.ArrayReference;
-    import AST.AssignmentStatement;
-    import AST.Block;
-    import AST.BooleanLiteral;
-    import AST.CharacterLiteral;
-    import AST.Declaration;
-    import AST.EqualyExpression;
-    import AST.Expression;
-    import AST.ExpressionList;
-    import AST.ExpressionStatement;
-    import AST.FloatLiteral;
-    import AST.FormalParameters;
-    import AST.Function;
-    import AST.FunctionBody;
-    import AST.FunctionCall;
-    import AST.FunctionDecl;
-    import AST.Identifier;
-    import AST.IfStatement;
-    import AST.IntegerLiteral;
-    import AST.LessThanExpression;
-    import AST.Literal;
-    import AST.MultiplyExpression;
-    import AST.ParenthesesExpression;
-    import AST.PrintlnStatement;
-    import AST.PrintStatement;
-    import AST.Program;
-    import AST.ReturnStatement;
-    import AST.StatementList;
-    import AST.StringLiteral;
-    import AST.SubtractExpression;
-    import AST.VariableDeclaration;
-    import AST.WhileStatement;
-    import type.ArrayType;
-    import type.BooleanType;
-    import type.CharType;
-    import type.FloatType;
-    import type.IntegerType;
-    import type.StringType;
-    import type.Type;
-    import type.VoidType;
+    import AST.*;
+    import Type.*;
 }                                               
 
 @members
@@ -83,16 +43,16 @@ public Object recoverFromMismatchedSet (IntStream input,
  *  - change functionBody to include variable declarations and statements 
  */
 
-program return [Program p]
+program returns [Program p]
 @init 
 {
         p = new Program();
 }
-        : 
+: 
         (f = function {p.add(f);} )+ EOF
 	;
 
-function return [Function f]
+function returns [Function f]
 : 
         fd = functionDecl fb = functionBody
         {
@@ -100,46 +60,59 @@ function return [Function f]
         }
 	;
 
-functionDecl return [FunctionDecl fd]
+functionDecl returns [FunctionDecl fd]
 : 
         ct = compoundType id = identifier OPARENTHESES fp = formalParameters CPARENTHESES
         {
                 Declaration d = new Declaration(ct, id);
                 fd = new FunctionDecl(d, fp);
+                fd.line = ct.line;
+                fd.offset = ct.offset;
         }
 	;
 
 //not sure if this works
-formalParameters return [FormalParameters fp] 
+formalParameters returns [FormalParameters fp] 
 @init
 {
         fp = new FormalParameters();
 }
 : 
-        (ct1 = compoundType id1 = identifier {fp.add(new Declaration(ct1, id1));} ) 
+        (ct1 = compoundType id1 = identifier 
+        {
+                fp.add(new Declaration(ct1, id1));
+                fp.line = ct1.line;
+                fp.offset = ct1.offset;
+        } ) 
         (COMMA ct2 = compoundType id2 = identifier {fp.add(new Declaration(ct2, id2));} )*
         |
         ;
 
 
-functionBody return [FunctionBody fb]
+functionBody returns [FunctionBody fb]
 @init
 {
         fb = new FunctionBody();
 }
 : 
         OBRACE (vd = varDecl {fb.addVarDecl(vd);} )* (s = statement {fb.addStatement(s);} )* CBRACE
+        {
+                fb.line = $OBRACE.line;
+                fb.offset = $OBRACE.pos;
+        }
 	;
 
-varDecl return [VariableDeclaration vd]: 
+varDecl returns [VariableDeclaration vd]: 
         ct = compoundType id = identifier SEMICOLON
         {
                 vd = new VariableDeclaration(ct, id);
+                vd.line = ct.line;
+                vd.offset = ct.offset;
         }
         ;
 
-statement return [Statement s]:
-        SEMICOLON {s = new Statement();}
+statement returns [Statement s]:
+        SEMICOLON {s = new EmptyStatement(); s.line = $SEMICOLON.line; s.offset = $SEMICOLON.pos;}
          | es = exprStatement {s = es;}
          | is = ifStatement {s = is;}
          | ws = whileStatement {s = ws;}
@@ -150,60 +123,97 @@ statement return [Statement s]:
          | ars = arrayAssignStatement {s = ars;}
         ;
 
-exprStatement return [ExpressionStatement es]
+exprStatement returns [ExpressionStatement es]
 : 
         e = expr SEMICOLON
         {
                 es = new ExpressionStatement(e);
+                es.line = e.line;
+                es.offset = e.offset;
         }
         ;
 
-ifStatement return [IfStatement is]:
-        IF OPARENTHESES e1 = expr CPARENTHESES b1 = block ELSE b2 = block {is = new IfStatement(e1, b1, b2);}
-        | IF OPARENTHESES e2 = expr CPARENTHESES b3 = block {} {is = new IfStatement(e2, b3);}
+ifStatement returns [IfStatement is]
+@after{
+        is.line = e.line;
+        is.offset = e.offset;
+}:
+        IF OPARENTHESES e = expr CPARENTHESES b1 = block ELSE b2 = block {is = new IfStatement(e, b1, b2);}
+        | IF OPARENTHESES e = expr CPARENTHESES b = block {is = new IfStatement(e, b);}
         ;
 
-whileStatement return [WhileStatement ws]: 
-        WHILE OPARENTHESES e = expr CPARENTHESES b = block {ws = new WhileStatement(e, b);}
+whileStatement returns [WhileStatement ws]: 
+        WHILE OPARENTHESES e = expr CPARENTHESES b = block 
+        {
+                ws = new WhileStatement(e, b);
+                ws.line = $WHILE.line;
+                ws.offset = $WHILE.pos;        
+        }
         ;
-printStatement return [PrintStatement ps]: 
-        PRINT e = expr SEMICOLON {ps = new PrintStatement(e);}
+
+printStatement returns [PrintStatement ps]: 
+        PRINT e = expr SEMICOLON 
+        {
+                ps = new PrintStatement(e);
+                ps.line = $PRINT.line;
+                ps.offset = $PRINT.pos;        
+        }
         ;
-printlnStatement return [PrintlnStatement pls]: 
-        PRINTLN e = expr SEMICOLON {pls = new PrintlnStatement(e);}
+        
+printlnStatement returns [PrintlnStatement pls]: 
+        PRINTLN e = expr SEMICOLON 
+        {
+                pls = new PrintlnStatement(e);
+                pls.line = $PRINTLN.line;
+                pls.offset = $PRINTLN.pos;
+        }
         ;
-returnStatement return [ReturnStatement rs]
+
+returnStatement returns [ReturnStatement rs]
 @init
 {
         rs = new ReturnStatement();
 }
 : 
         RETURN (e = expr {rs.addExpression(e);} )? SEMICOLON
+        {
+                rs.line = $RETURN.line;
+                rs.offset = $RETURN.pos;
+        }
         ;
-assignStatement return [AssignmentStatement as]: 
+
+assignStatement returns [AssignmentStatement as]: 
         id = identifier EQUAL e = expr SEMICOLON
         {
                 as = new AssignmentStatement(id, e);
+                as.line = id.line;
+                as.offset = id.offset;
         }
         ;     
 
-arrayAssignStatement return [ArrayAssignmentStatement ars]:
-        ar = arrayRef EQUAL e2 = expr SEMICOLON
+arrayAssignStatement returns [ArrayAssignmentStatement ars]:
+        ar = arrayRef EQUAL e = expr SEMICOLON
         {
                 ars = new ArrayAssignmentStatement(ar, e);
+                ars.line = ar.line;
+                ars.offset = ar.offset;
         }
         ;
 
-block return [Block b]
+block returns [Block b]
 @init
 {
         b = new Block();
 }
 : 
         OBRACE (s = statement {b.add(s);})* CBRACE
+        {
+                b.line = $OBRACE.line;
+                b.offset = $OBRACE.pos;
+        }
         ;
 
-expr return [Expression e]
+expr returns [Expression e]
 @init{
         Expression it = null;
 }
@@ -211,40 +221,52 @@ expr return [Expression e]
         e = it;
 }
 : 
-        e1 = expr2 {it = e1;}
-        ( DOUBLEEQUAL e2 = expr2 {it = new EqualExpression(it, e2);} )*  
+        e1 = lessThanExpr {it = e1;}
+        ( DOUBLEEQUAL e2 = lessThanExpr 
+        {
+                it = new EqualExpression(it, e2);
+                it.line = $DOUBLEEQUAL.line;
+                it.offset = $DOUBLEEQUAL.pos;
+        } )*  
         ;
 
-expr2 return [Expression e]
+lessThanExpr returns [Expression e]
 @init{
         Expression it = null;
 }
 @after{
         e = it;
 }: 
-        e1 = expr3 {it = e1;}
-        ( LESSTHAN e2 = expr3 {it = new LessThanExpression(it, e2);} )* 
+        e1 = plusMinusExpr {it = e1;}
+        ( LESSTHAN e2 = plusMinusExpr 
+        {
+                it = new LessThanExpression(it, e2);
+                it.line = $LESSTHAN.line;
+                it.offset = $LESSTHAN.pos;
+        } )* 
         ;
 
-expr3 return [Expression e]
+plusMinusExpr returns [Expression e]
 @init{
         Expression it = null;
 }
 @after{
         e = it;
 }: 
-        e1 = expr4 {it = e1;}
-        ( op = (PLUS|MINUS) e2 = expr4 
+        e1 = mulExpr {it = e1;}
+        ( op = (PLUS|MINUS) e2 = mulExpr 
         {
                 if (op.getText().equals("+")) {
                         it = new AddExpression(it, e2);
                 } else {
                         it = new SubstractExpression(it, e2);
                 }
+                it.line = $op.line;
+                it.offset = $op.pos;
         })* 
         ;
 
-expr4 [Expression e]
+mulExpr returns [Expression e]
 @init{
         Expression it = null;
 }
@@ -252,63 +274,79 @@ expr4 [Expression e]
         e = it;
 }: 
         e1 = atom {it = e1;}
-        ( MULTIPLY e2 = atom {it = new MultiplyExpression(it, e2);})*      
+        ( MULTIPLY e2 = atom 
+        {
+                it = new MultiplyExpression(it, e2);
+                it.line = $MULTIPLY.line;
+                it.offset = $MULTIPLY.pos;
+        })*      
         ;
 
-atom return [Expression e]:    
+atom returns [Expression e]:    
         i = identifier {e = i;}
         | l = literal {e = l;}
         | f = functionCall {e = f;}
         | a = arrayRef {e = a;}
-        | OPARENTHESES ex = expr CPARENTHESES {e = new ParenthesesExpression(ex);}
+        | OPARENTHESES exp = expr CPARENTHESES {e = new ParenthesesExpression(exp); e.line = $OPARENTHESES.line;e.offset = $OPARENTHESES.pos;}
     ;
 
-functionCall return [FunctionCall fc]:   
-        id = identifier OPARENTHESES el = exprList CPARENTHESES
-        {
-                fc = new FunctionCall(id);
-                fc.setExpressionList(el.getExpressionList());
-        }
+functionCall returns [FunctionCall fc]:   
+        id = identifier {fc = new FunctionCall(id); fc.line = id.line; fc.offset = id.offset;}
+        OPARENTHESES (e1 = expr {fc.add(e1);}  (COMMA e2 = expr {fc.add(e2);} )* )? CPARENTHESES
         ;
 
-arrayRef return [ArrayReference ar]:    
+arrayRef returns [ArrayReference ar]:    
         id = identifier OBRACKET e = expr CBRACKET
         {
                 ar = new ArrayReference(id, e);
+                ar.line = id.line;
+                ar.offset = id.offset;
         }
         ;
 
-exprList return [ExpressionList el]
-@init {
-        el = new ExpressionList();
-}
-: 
-        e1 = expr {el.add(e1);} e2 = (COMMA expr {el.add(e2);} )* 
-        | 
+
+literal returns [Literal l]
+@after{
+        l.line = $v.line;
+        l.offset = $v.pos;
+}: 
+        v = INTEGERCONSTANT {l = new IntegerLiteral(Integer.parseInt($v.text));}
+        | v = STRINGCONSTANT {String txt = $v.text; l = new StringLiteral(txt.substring(1, txt.length()-1));}
+        | v = FLOATCONSTANT {l = new FloatLiteral(Float.parseFloat($v.text));}
+        | v = CHARACTERCONSTANT {l = new CharacterLiteral($v.text.charAt(1));}
+        | v = TRUE {l = new BooleanLiteral(true);}
+        | v = FALSE {l = new BooleanLiteral(false);}
         ;
 
-literal return [Literal l]: 
-        INTEGERCONSTANT {l = new IntegerLiteral(Integer.parseInt($INTEGERCONSTANT.text));}
-        | STRINGCONSTANT {String txt = $STRINGCONSTANT.text; l = new StringLiteral(txt.substring(1, txt.length()-1));}
-        | FLOATCONSTANT {l = new FloatLiteral(Float.parseFloat($FLOATCONSTANT.text));}
-        | CHARACTERCONSTANT {l = new CharacterLiteral($CHARACTERCONSTANT.text.charAt(1));}
-        | TRUE {l = new BooleanLiteral(true);}
-        | FALSE {l = new BooleanLiteral(false);}
-        ;
-
-identifier return [Identifier id]: 
-        ID {id = new Identifier($ID.text);}
-	;
-
-compoundType return [Type tn]:	
-        t = type {tn = t;}
-        |  t2 = type OBRACKET INTEGERCONSTANT CBRACKET {tn = new ArrayType(t2, Integer.parseInt($INTEGERCONSTANT.text));}
-	;
-
-type return [Type t]:	
-        TYPE
+identifier returns [Identifier id]: 
+        i = ID 
         {
-                String ty = $TYPE.text;
+                id = new Identifier($i.text);
+                id.line = $i.line;
+                id.offset = $i.pos;
+        }
+	;
+
+compoundType returns [TypeNode tn]:	
+        t = type {tn = t;}
+        |  t2 = type OBRACKET i = INTEGERCONSTANT CBRACKET 
+                {
+                        Type te = new ArrayType(t2.type, Integer.parseInt($i.text));
+                        tn = new TypeNode(te);
+                        tn.line = t2.line;
+                        tn.offset = t2.offset;
+                }
+	;
+
+type returns [TypeNode te]
+@after{
+        te.line = $typ.line;
+        te.offset = $typ.pos;
+}:	
+        typ = TYPE
+        {
+                String ty = $typ.text;
+                Type t;
                 if(ty.equals("int")) {
                         t = new IntegerType();
                 } else if(ty.equals("float")) {
@@ -321,7 +359,10 @@ type return [Type t]:
                         t = new BooleanType();
                 } else if(ty.equals("void")) {
                         t = new VoidType();
+                } else {
+                        t = null;   
                 }
+                te = new TypeNode(t);
         }
 	;
 

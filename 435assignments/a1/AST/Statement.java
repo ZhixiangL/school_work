@@ -1,3 +1,3 @@
-package ast;
+package AST;
 
-public class Statement extends ASTNode {}
+public abstract class Statement extends ASTNode {}
