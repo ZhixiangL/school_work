@@ -7,4 +7,7 @@ public class ParenthesesExpression extends Expression {
         this.expr = e;
     }
 
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

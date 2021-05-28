@@ -14,4 +14,8 @@ public class FunctionCall extends Expression {
     public void add(Expression e) {
         expressionList.add(e);
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

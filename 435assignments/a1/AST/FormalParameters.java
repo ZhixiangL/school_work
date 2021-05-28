@@ -23,4 +23,8 @@ public class FormalParameters extends ASTNode {
     public int size() {
         return this.size;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

@@ -3,8 +3,8 @@ package AST;
 import java.util.ArrayList;
 
 public class ExpressionList extends ASTNode {
-    private ArrayList<Expression> el;
-    private int size;
+    public ArrayList<Expression> el;
+    public int size;
 
     public ExpressionList() {
         this.el = new ArrayList<Expression>();
@@ -27,5 +27,9 @@ public class ExpressionList extends ASTNode {
 
     public int size() {
         return this.size;
+    }
+
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }

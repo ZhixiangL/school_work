@@ -11,4 +11,8 @@ public class FunctionDecl extends ASTNode {
         this.formalParameters = f;
     }
 
+    public void accept(PrettyPrintVisitor v) {
+        v.visit(this);
+    }
+
 }

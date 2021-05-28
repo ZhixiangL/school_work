@@ -10,4 +10,8 @@ public class ReturnStatement extends Statement {
     public void addExpression(Expression e) {
         this.expr = e;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

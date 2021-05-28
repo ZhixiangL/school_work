@@ -12,4 +12,5 @@ public class ASTNode {
         line = l;
         offset = o;
     }
+
 }

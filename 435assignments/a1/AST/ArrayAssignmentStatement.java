@@ -9,4 +9,7 @@ public class ArrayAssignmentStatement extends Statement {
         this.expr = e;
     }
 
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

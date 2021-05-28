@@ -9,4 +9,7 @@ public class TypeNode extends ASTNode {
         this.type = type;
     }
 
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

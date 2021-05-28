@@ -12,4 +12,8 @@ public class Block extends ASTNode {
     public void add(Statement s) {
         this.statementArray.add(s);
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

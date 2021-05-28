@@ -8,4 +8,8 @@ public class AssignmentStatement extends Statement {
         this.id = i;
         this.expr = e;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

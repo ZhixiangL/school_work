@@ -7,4 +7,8 @@ public class IntegerLiteral extends Literal {
         this.value = i;
     }
 
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
+
 }

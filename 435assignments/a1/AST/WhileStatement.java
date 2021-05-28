@@ -8,4 +8,8 @@ public class WhileStatement extends Statement {
         this.expr = e;
         this.block = b;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

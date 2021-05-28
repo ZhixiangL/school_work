@@ -6,4 +6,8 @@ public class CharacterLiteral extends Literal {
     public CharacterLiteral(char c) {
         this.value = c;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

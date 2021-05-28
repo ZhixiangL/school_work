@@ -17,4 +17,8 @@ public class IfStatement extends Statement {
         this.elseBlock = b2;
     }
 
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
+
 }

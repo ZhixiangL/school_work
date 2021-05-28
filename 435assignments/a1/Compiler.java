@@ -7,6 +7,8 @@
 
 import org.antlr.runtime.*;
 import java.io.*;
+import AST.Program;
+import AST.PrettyPrintVisitor;
 
 public class Compiler {
 	public static void main (String[] args) throws Exception {
@@ -27,7 +29,8 @@ public class Compiler {
 		ulNoActionsParser parser = new ulNoActionsParser(tokens);
 
 		try {
-			parser.program();
+			Program program = parser.program();
+			program.accept(new PrettyPrintVisitor());
 		}
 		catch (RecognitionException e )	{
 			// A lexical or parsing error occured.

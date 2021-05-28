@@ -9,4 +9,8 @@ public class AddExpression extends Expression {
         this.leftExpr = e1;
         this.rightExpr = e2;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

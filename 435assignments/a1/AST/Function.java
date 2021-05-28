@@ -8,4 +8,8 @@ public class Function extends ASTNode {
         this.functionDecl = fd;
         this.functionBody = fb;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

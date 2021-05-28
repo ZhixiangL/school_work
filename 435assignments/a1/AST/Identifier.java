@@ -6,4 +6,8 @@ public class Identifier extends Expression {
     public Identifier (String s) {
         this.id = s;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

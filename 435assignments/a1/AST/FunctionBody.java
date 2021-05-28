@@ -18,4 +18,8 @@ public class FunctionBody extends ASTNode {
     public void addStatement(Statement s) {
         this.statementArray.add(s);
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

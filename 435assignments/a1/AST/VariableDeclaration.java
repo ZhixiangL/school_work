@@ -8,5 +8,9 @@ public class VariableDeclaration extends ASTNode {
         this.type = t;
         this.id = i;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
  
 }

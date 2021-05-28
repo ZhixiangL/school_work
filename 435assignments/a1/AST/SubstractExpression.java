@@ -10,4 +10,8 @@ public class SubstractExpression extends Expression {
         this.rightExpr = e2;
     }
 
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
+
 }

@@ -7,4 +7,7 @@ public class FloatLiteral extends Literal {
         this.value = f;
     }
 
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }

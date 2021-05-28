@@ -329,8 +329,7 @@ identifier returns [Identifier id]:
 
 compoundType returns [TypeNode tn]:	
         t = type {tn = t;}
-        |  t2 = type OBRACKET i = INTEGERCONSTANT CBRACKET 
-                {
+        |  t2 = type OBRACKET i = INTEGERCONSTANT CBRACKET {
                         Type te = new ArrayType(t2.type, Integer.parseInt($i.text));
                         tn = new TypeNode(te);
                         tn.line = t2.line;
@@ -339,10 +338,7 @@ compoundType returns [TypeNode tn]:
 	;
 
 type returns [TypeNode te]
-@after{
-        te.line = $typ.line;
-        te.offset = $typ.pos;
-}:	
+:	
         typ = TYPE
         {
                 String ty = $typ.text;
@@ -363,6 +359,8 @@ type returns [TypeNode te]
                         t = null;   
                 }
                 te = new TypeNode(t);
+                te.line = $typ.line;
+                te.offset = $typ.pos;
         }
 	;
 

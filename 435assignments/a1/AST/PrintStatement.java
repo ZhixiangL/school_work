@@ -6,4 +6,8 @@ public class PrintStatement extends Statement {
     public PrintStatement(Expression e){
         this.expr = e;
     }
+
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
