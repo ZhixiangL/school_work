@@ -46,46 +46,56 @@ func ihash(key string) int {
 func Worker(mapf func(string, string) []KeyValue,
 	reducef func(string, []string) string) {
 	//map part
-	reply :=Call(-1, -1)
+	reply :=Call(-1, -1, -1)
 	for reply.Wait {
-		//time.Sleep(2*time.Second)
-		reply = Call(-1, -1)
+		time.Sleep(2*time.Second)
+		reply = Call(-1, -1, -1)
 	}
-	id := reply.FileId
-	filename := reply.FileName
-	nReduce := reply.NReduce
-	files := make([]*os.File, nReduce)
-
-	for i :=0; i<nReduce; i++ {
-		nf, _ := os.Create("mr-"+strconv.Itoa(id)+"-"+strconv.Itoa(i))
-		files[i] = nf
-	}	
-	for (!reply.MapStop) {
-		file, err := os.Open(filename)
-		if err != nil {
-			log.Fatalf("cannot open %v", filename)
-		}
-		content, err := ioutil.ReadAll(file)
-		if err != nil {
-			log.Fatalf("cannot read %v", filename)
-		}
-		file.Close()
-		kva := mapf(filename, string(content))
-		for _, ele := range kva {
-			bucket := ihash(ele.Key) % nReduce
-			enc := json.NewEncoder(files[bucket])
-			enc.Encode(&ele)
-		}
-		reply = Call(reply.FileId, -1)
-		for reply.Wait {
-			//time.Sleep(2*time.Second)
-			reply = Call(reply.FileId, -1)
-		}
+	var filename string
+	var id int = -1
+	if(!reply.MapStop && !reply.Stop) {
+		id = reply.MapId
+		lastFileId := reply.FileId
 		filename = reply.FileName
+		nReduce := reply.NReduce
+		files := make([]*os.File, nReduce)
+	
+		for i :=0; i<nReduce; i++ {
+			nf, _ := os.Create("mr-"+strconv.Itoa(id)+"-"+strconv.Itoa(i))
+			files[i] = nf
+		}	
+		for (!reply.MapStop && !reply.Stop) {
+			filename = reply.FileName
+			lastFileId = reply.FileId
+			file, err := os.Open(filename)
+			if err != nil {
+				log.Fatalf("cannot open %v", filename)
+			}
+			content, err := ioutil.ReadAll(file)
+			if err != nil {
+				log.Fatalf("cannot read %v", filename)
+			}
+			file.Close()
+			kva := mapf(filename, string(content))
+			for _, ele := range kva {
+				bucket := ihash(ele.Key) % nReduce
+				enc := json.NewEncoder(files[bucket])
+				enc.Encode(&ele)
+			}
+			reply = Call(lastFileId, -1, id)
+			for reply.Wait {
+				time.Sleep(2*time.Second)
+				reply = Call(lastFileId, -1, id)
+			}
+			
+		}
 	}
-	time.Sleep(3*time.Second)
+
+	time.Sleep(2*time.Second)
+	lastReduceId := reply.NReduceId
 	for !reply.Stop {
-		matches, err := filepath.Glob("./mr-*-"+ strconv.Itoa(reply.NReduceId) )
+
+		matches, err := filepath.Glob("./mr-*-"+ strconv.Itoa(lastReduceId) )
 		if err != nil {
 				fmt.Println(err)
 		}
@@ -108,9 +118,9 @@ func Worker(mapf func(string, string) []KeyValue,
 		}
 		sort.Sort(ByKey(intermediate))
 
-		oname := "mr-out-" + strconv.Itoa(reply.NReduceId)
-		ofile, _ := os.Create(oname)
-
+		oname := "mr-out-" + strconv.Itoa(lastReduceId)
+		
+		outputs := []KeyValue{}
 		i := 0
 		for i < len(intermediate) {
 			j := i + 1
@@ -122,21 +132,23 @@ func Worker(mapf func(string, string) []KeyValue,
 				values = append(values, intermediate[k].Value)
 			}
 			output := reducef(intermediate[i].Key, values)
-
-			// this is the correct format for each line of Reduce output.
-			fmt.Fprintf(ofile, "%v %v\n", intermediate[i].Key, output)
+			outputs = append(outputs, KeyValue{intermediate[i].Key, output})
 
 			i = j
 		}
-
+		ofile, _ := os.Create(oname)
+		for _, v := range outputs {
+			fmt.Fprintf(ofile, "%v %v\n", v.Key, v.Value)
+		}
 		ofile.Close()
 
-		reply = Call(0, reply.NReduceId)
+		reply = Call(0, lastReduceId, id)
 		for reply.Wait {
 			time.Sleep(2*time.Second)
-			reply = Call(0, reply.NReduceId)
+			reply = Call(0, lastReduceId, id)
 		}
 		filename = reply.FileName
+		lastReduceId = reply.NReduceId
 
 	
 	}
@@ -152,11 +164,12 @@ func Worker(mapf func(string, string) []KeyValue,
 //
 // the RPC argument and reply types are defined in rpc.go.
 //
-func Call(lastFileId int, lastReduceId int) Reply{
+func Call(lastFileId int, lastReduceId int, id int) Reply{
 
 	args := Args{}
 	args.LastFileId = lastFileId
 	args.LastReduceId = lastReduceId
+	args.Id = id
 	// declare a reply structure.
 	reply := Reply{}
 

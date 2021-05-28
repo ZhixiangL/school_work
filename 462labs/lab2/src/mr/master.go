@@ -7,9 +7,11 @@ import "net/rpc"
 import "net/http"
 import "time"
 //import "fmt"
+import "sync"
 
 type Master struct {
 	// Your definitions here.
+	mu sync.Mutex 
 	files []string
 	fileStatus []int
 	reduceId int
@@ -18,6 +20,7 @@ type Master struct {
 	nReduce int
 	mapDone bool
 	reduceDone bool 
+	mapId int
 }
 
 // Your code here -- RPC handlers for the worker to call.
@@ -53,24 +56,29 @@ func (m *Master) assignNReduce(reply *Reply) {
 			m.nReduceStatus[i] = 1
 			m.countDown[i] = time.Now()
 			reply.NReduceId = i
+			reply.MapStop = true
 			return 
 		}
 	}
 	if !m.reduceDone {
 		reply.Wait = true
+		reply.MapStop = true
 	} else {
 		reply.Stop = true
 	}
 }
 
-func (m *Master) assignMap(reply *Reply) {
+func (m *Master) assignMap(args *Args, reply *Reply) {
 	for i, file := range m.files {
 		if (m.fileStatus[i]==0) || (m.fileStatus[i]==1 && m.countDown[i].Add(10*time.Second).Before(time.Now())) {
-			m.fileStatus[i] = 1
 			m.countDown[i] = time.Now()
+			m.fileStatus[i] = 1
 			reply.FileName = file
 			reply.FileId = i
-			reply.Stop = false
+			if(args.Id == -1){
+				reply.MapId = m.mapId
+				m.mapId += 1
+			}
 			reply.NReduce = m.nReduce
 			return
 		}
@@ -84,38 +92,36 @@ func (m *Master) assignMap(reply *Reply) {
 }
 
 func (m *Master) Example(args *Args, reply *Reply) error {
+	m.mu.Lock()
 	if args.LastFileId == -1 && !m.mapDone {
-		m.assignMap(reply)
-
+		m.assignMap(args, reply)
 	} else if !m.mapDone {
-		m.fileStatus[args.LastFileId] = 2
+		if m.fileStatus[args.LastFileId] != 2  {
+			m.fileStatus[args.LastFileId] = 2
+		}
 		if m.allFilesMapped() {
 			m.mapDone = true
 			reply.MapStop = true
 			m.countDown = make([]time.Time, m.nReduce)
 			m.assignNReduce(reply)
+			defer m.mu.Unlock()
 			return nil
 		}
-		m.assignMap(reply)
+		m.assignMap(args, reply)
 	} else if !m.reduceDone {
-		// if args.LastReduceId == m.nReduce -1 {
-		// 	m.reduceDone = true
-		// 	reply.Stop = true
-		// 	return nil
 		if (args.LastReduceId != -1) {
 			m.nReduceStatus[args.LastReduceId] = 2
 			if m.allReducesDone(){
 				m.reduceDone = true
+				defer m.mu.Unlock()
 				return nil
 			}
 		}
 		m.assignNReduce(reply)
-
-
 	} else {
 		reply.Stop = true
 	}
-
+	defer m.mu.Unlock()
 	return nil
 }
 
@@ -142,19 +148,7 @@ func (m *Master) server() {
 //
 func (m *Master) Done() bool {
 
-	ret := true
-	for _, v := range m.fileStatus {
-		if v!= 2 {
-			return false
-		}
-	} 
-	for _, v := range m.nReduceStatus {
-		if v!= 2 {
-			return false
-		}
-	} 
-
-	return ret
+	return m.mapDone && m.reduceDone
 }
 
 //
@@ -171,10 +165,14 @@ func MakeMaster(files []string, nReduce int) *Master {
 	m.fileStatus = make([]int, len(files))
 	m.nReduceStatus = make([]int, nReduce)
 	m.countDown = make([]time.Time, len(files))
+	// for i, _ := range m.countDown {
+	// 	m.countDown[i] = time.Now().Add(1*time.Hour)
+	// }
 	m.nReduce = nReduce
-	m.reduceId = 0
-	m.mapDone = false
-	m.reduceDone = false
+	// m.reduceId = 0
+	// m.mapDone = false
+	// m.reduceDone = false
+	// m.mapId = 0
 
 	m.server()
 	return &m
