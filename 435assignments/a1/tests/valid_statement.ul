@@ -21,7 +21,7 @@ void main ()
     ;
     f=1.234;
     ;
-    string[1]="ele1";
+    strArr[1]="ele1";
     strArr=foo();
     ;
     if (true)
@@ -43,4 +43,5 @@ void main ()
     {
         (123);
     }
+    return;
 }

@@ -1,6 +1,7 @@
 int sampleOne (int x, float y)
 {
-    if (x<y) {
+    if (x<y)
+    {
         print "Hello";
     }
     else
@@ -21,7 +22,8 @@ void sampleTwo (int x)
     x=8;
 }
 
-void main () {
+void main ()
+{
     string[10] a;
     int w;
 

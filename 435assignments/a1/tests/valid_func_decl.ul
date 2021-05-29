@@ -1,0 +1,11 @@
+int _ (int x)
+{
+}
+
+void sampleTwo ()
+{
+}
+
+char[3000] _main (char a, int b, string c, boolean d, void e, float f)
+{
+}

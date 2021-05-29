@@ -1,0 +1,16 @@
+void foo (char c)
+{
+    return 0;
+}
+
+void main ()
+{
+    int[2] a;
+    int a;
+
+    a[0]=101;
+    ((1+2*32)<(99-3))==true;
+    foo('a')+a[0]<5.2;
+    "abc"=="bca";
+    1+2-foo("a")==3;
+}

@@ -111,7 +111,6 @@ public class PrettyPrintVisitor implements Visitor {
     public void visit(Function f) {
         f.functionDecl.accept(this);
         f.functionBody.accept(this);
-        System.out.println();
     }
 
     public void visit(FunctionBody f) {
@@ -204,6 +203,9 @@ public class PrettyPrintVisitor implements Visitor {
     public void visit(Program p) {
         for (int i = 0; i<p.size; i++) {
             p.funcList.get(i).accept(this);
+            if (i < p.size-1) {
+                System.out.println();
+            }
         }
     }
 
@@ -218,7 +220,9 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(StringLiteral l) {
+        System.out.print("\"");
         System.out.print(l.value);
+        System.out.print("\"");
     }
 
     public void visit(SubstractExpression e) {
