@@ -1,12 +1,14 @@
 package AST;
 
-import java.lang.StringBuilder;
-
 public class PrettyPrintVisitor implements Visitor {
-    private int indentationDepth;
+    private int indentLevel;
 
     public PrettyPrintVisitor() {
-        this.indentationDepth = 1;
+        this.indentLevel = 0;
+    }
+
+    private final void indent() {
+        System.out.print(" ".repeat(4 * this.indentLevel));
     }
 
     public void visit(AddExpression e) {
@@ -16,7 +18,7 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(ArrayAssignmentStatement s) {
-        this.printIndentation();
+        this.indent();
         s.arrayReference.accept(this);
         System.out.print("=");
         s.expr.accept(this);
@@ -31,7 +33,7 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(AssignmentStatement s) {
-        this.printIndentation();
+        this.indent();
         s.id.accept(this);
         System.out.print("=");
         s.expr.accept(this);
@@ -39,14 +41,14 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(Block b) {
-        this.printIndentation();
+        this.indent();
         System.out.println("{");
-        this.indentationDepth++;
+        this.indentLevel++;
         for (int i = 0; i<b.statementArray.size(); i++) {
             b.statementArray.get(i).accept(this);
         }
-        this.indentationDepth--;
-        this.printIndentation();
+        this.indentLevel--;
+        this.indent();
         System.out.println("}");
     }
 
@@ -66,7 +68,7 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(EmptyStatement s) {
-        this.printIndentation();
+        this.indent();
         System.out.println(";");
     }
 
@@ -88,7 +90,7 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(ExpressionStatement s) {
-        this.printIndentation();
+        this.indent();
         s.expr.accept(this);
         System.out.println(";");
     }
@@ -115,6 +117,7 @@ public class PrettyPrintVisitor implements Visitor {
 
     public void visit(FunctionBody f) {
         System.out.println("{");
+        this.indentLevel++;
         for (int i = 0; i<f.variableDeclarationArray.size(); i++) {
             f.variableDeclarationArray.get(i).accept(this);
         }
@@ -124,6 +127,7 @@ public class PrettyPrintVisitor implements Visitor {
         for (int i = 0; i<f.statementArray.size(); i++) {
             f.statementArray.get(i).accept(this);
         }
+        this.indentLevel--;
         System.out.println("}");
     }
 
@@ -151,13 +155,13 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(IfStatement s) {
-        this.printIndentation();
+        this.indent();
         System.out.print("if (");
         s.expr.accept(this);
         System.out.println(")");
         s.ifBlock.accept(this);
         if (s.elseBlock != null) {
-            this.printIndentation();
+            this.indent();
             System.out.println("else");
             s.elseBlock.accept(this);
         }
@@ -187,14 +191,14 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(PrintlnStatement s) {
-        this.printIndentation();
+        this.indent();
         System.out.print("println ");
         s.expr.accept(this);
         System.out.println(";");
     }
 
     public void visit(PrintStatement s) {
-        this.printIndentation();
+        this.indent();
         System.out.print("print ");
         s.expr.accept(this);
         System.out.println(";");
@@ -210,7 +214,7 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(ReturnStatement s) {
-        this.printIndentation();
+        this.indent();
         System.out.print("return");
         if (s.expr != null) {
             System.out.print(" ");
@@ -236,27 +240,17 @@ public class PrettyPrintVisitor implements Visitor {
     }
 
     public void visit(VariableDeclaration d) {
-        this.printIndentation();
+        this.indent();
         d.type.accept(this);
         d.id.accept(this);
         System.out.println(";");
     }
 
     public void visit(WhileStatement s) {
-        this.printIndentation();
+        this.indent();
         System.out.print("while (");
         s.expr.accept(this);
         System.out.println(")");
         s.block.accept(this);
-    }
-
-    private final void printIndentation() {
-        int totalIndentation = 4 * this.indentationDepth;
-        StringBuilder sb = new StringBuilder(totalIndentation);
-        for (int i = 0; i < totalIndentation; i++) {
-            sb.append(" ");
-        }
-        String spaces = sb.toString();
-        System.out.print(spaces);
     }
 }

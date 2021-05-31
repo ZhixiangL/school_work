@@ -22,11 +22,9 @@ public class Compiler {
 			input = new ANTLRInputStream(new FileInputStream(args[0]));
 		}
 
-		// The name of the grammar here is "ulNoActions",
-		// so ANTLR generates ulNoActionsLexer and ulNoActionsParser
-		ulNoActionsLexer lexer = new ulNoActionsLexer(input);
+		ulLexer lexer = new ulLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		ulNoActionsParser parser = new ulNoActionsParser(tokens);
+		ulParser parser = new ulParser(tokens);
 
 		try {
 			Program program = parser.program();
