@@ -1,0 +1,9 @@
+void foo (char c)
+{
+    return 0;
+}
+
+void main ()
+{
+    1+2-foo("a")==3;
+}
