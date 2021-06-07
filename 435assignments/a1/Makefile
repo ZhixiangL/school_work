@@ -12,6 +12,7 @@ compiler:
 
 clean:
 	rm *.class $(GNAME)*.java $(GNAME).tokens ./AST/*.class ./Type/*.class
+	rm -r ./.antlr
 
 
  
