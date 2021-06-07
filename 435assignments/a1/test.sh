@@ -1,5 +1,7 @@
 #!/bin/sh
 
+## It's possible that for some system reason, this shell script doesn't work.
+## In this case, please run the commands manually.
 make
 echo "\n>>>>>>>>>>Valid tests and diff start<<<<<<<<<<"
 java Compiler tests/valid_guideline.ul | diff - tests/valid_guideline.ul
