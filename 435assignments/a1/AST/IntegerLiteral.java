@@ -11,4 +11,8 @@ public class IntegerLiteral extends Literal {
         v.visit(this);
     }
 
+    public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
 }
