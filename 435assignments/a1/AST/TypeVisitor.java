@@ -7,11 +7,11 @@ import Type.*;
 public class TypeVisitor {
     private Environment<String, FunctionDecl> fEnv;
     private Environment<String, Type> vEnv;
-    private Type currentFunctionReturnType;
+    private Type funcReturnType;
 
     public TypeVisitor () {
-        fEnv = new StackHashMapEnvironment<FunctionDecl>();
-        vEnv = new StackHashMapEnvironment<Type>();
+        fEnv = new StackEnvironment<String, FunctionDecl>();
+        vEnv = new StackEnvironment<String, Type>();
     }
 
     public Type visit(AddExpression e) throws SemanticException{
@@ -45,14 +45,14 @@ public class TypeVisitor {
         Type arrType = r.id.accept(this);
         if (!(arrType instanceof ArrayType)) {
             throw new SemanticException(
-                "Variable " + r.id.id + "is not of type array.",
+                "Variable " + r.id.id + "is not of type Array.",
                 r.line,
                 r.offset);
         }
         Type index = r.expr.accept(this);
         if (!index.equals(new IntegerType())) {
             throw new SemanticException(
-                "Array index expression must be of type int.",
+                "Array index expression is not of type int.",
                 r.line,
                 r.offset);
         }
@@ -90,7 +90,7 @@ public class TypeVisitor {
         }
         if (d.type.type.equals(new VoidType())){
             throw new SemanticException(
-                "Variable " + d.id.id + " has type void.",
+                "Variable " + d.id.id + " should not be of type void.",
                 d.id.line,
                 d.id.offset);
         }
@@ -184,14 +184,14 @@ public class TypeVisitor {
     }
 
     public Type visit(FunctionDecl f) throws SemanticException{
-        this.currentFunctionReturnType = f.declaration.type.type;
+        this.funcReturnType = f.declaration.type.type;
         f.formalParameters.accept(this);
         return null;
     }
 
     public Type visit(Identifier i) throws SemanticException{
         if (!this.vEnv.inCurrentScope(i.id)) {
-            throw new SemanticException("Variable " + i.id + " is undeclared.",
+            throw new SemanticException("Variable " + i.id + " is not declared.",
                 i.line,
                 i.offset);
         }
@@ -221,8 +221,7 @@ public class TypeVisitor {
             left.equals(new IntegerType()) ||
             left.equals(new FloatType()) ||
             left.equals(new CharType()) ||
-            left.equals(new StringType()) ||
-            left.equals(new BooleanType()))) {
+            left.equals(new StringType()))) {
         } else {
             throw new SemanticException(
                 "Cannot compare type " + left + " with type " + right + ".",
@@ -252,7 +251,7 @@ public class TypeVisitor {
         Type t = s.expr.accept(this);
         if ( (t instanceof ArrayType) || (t instanceof VoidType) ) {
             throw new SemanticException(
-                "Array cannot be printed.",
+                "Array or void type cannot be printed.",
                 s.expr.line,
                 s.expr.offset);
         }
@@ -262,7 +261,7 @@ public class TypeVisitor {
         Type t = s.expr.accept(this);
         if ( (t instanceof ArrayType) || (t instanceof VoidType)) {
             throw new SemanticException(
-                "Array cannot be printed.",
+                "Array or void type cannot be printed.",
                 s.expr.line,
                 s.expr.offset);
         }
@@ -277,7 +276,8 @@ public class TypeVisitor {
             String fName = d.id.id;
             Type type = d.type.type;
             if (this.fEnv.inCurrentScope(fName)) {
-                throw new SemanticException("Function " + fName + " already exists.",
+                throw new SemanticException(
+                    "Function " + fName + " already exists.",
                     d.line,
                     d.offset);
             }
@@ -313,9 +313,9 @@ public class TypeVisitor {
     }
 
     public Type visit(ReturnStatement s) throws SemanticException{
-        if (s.expr == null && !currentFunctionReturnType.equals(new VoidType())){
+        if (s.expr == null && !funcReturnType.equals(new VoidType())){
             throw new SemanticException(
-                "Return expression is empty and does not match function return type.",
+                "Return expression is empty and does not match the function return type.",
                 s.line,
                 s.offset);
         }
@@ -323,7 +323,7 @@ public class TypeVisitor {
             return null;
         }
         Type returnExprType = s.expr.accept(this);
-        if (!returnExprType.equals(currentFunctionReturnType)){
+        if (!returnExprType.equals(funcReturnType)){
             throw new SemanticException(
                 "Return expression does not match function return type.",
                 s.line,
@@ -361,7 +361,7 @@ public class TypeVisitor {
         }
         if (d.type.type.equals(new VoidType())){
             throw new SemanticException(
-                "Variable " + d.id.id + " has type void.",
+                "Variable " + d.id.id + " should not be of type void.",
                 d.id.line,
                 d.id.offset);
         }

@@ -36,7 +36,6 @@ public class Compiler {
 			// nothing to do here.
 		}
 		catch (Exception e) {
-			System.out.println(e);
 			e.printStackTrace();
 		}
 	}
