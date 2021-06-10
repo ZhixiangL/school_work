@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class EqualExpression extends Expression {
     

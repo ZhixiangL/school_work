@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class PrintlnStatement extends Statement {
     public Expression expr;

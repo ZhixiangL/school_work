@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class VariableDeclaration extends ASTNode {
     public TypeNode type;

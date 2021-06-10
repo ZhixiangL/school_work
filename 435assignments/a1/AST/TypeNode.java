@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 import Type.Type;
 

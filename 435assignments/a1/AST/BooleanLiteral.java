@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class BooleanLiteral extends Literal {
     public boolean value;

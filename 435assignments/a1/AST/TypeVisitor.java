@@ -2,9 +2,10 @@ package AST;
 
 import Environment.*;
 import java.util.ArrayList;
+import Type.*;
 
 public class TypeVisitor {
-    private Environment<String, FunctionDeclaration> fEnv;
+    private Environment<String, FunctionDecl> fEnv;
     private Environment<String, Type> vEnv;
     private Type currentFunctionReturnType;
 
@@ -42,27 +43,27 @@ public class TypeVisitor {
     }
     public Type visit(ArrayReference r) throws SemanticException{
         Type arrType = r.id.accept(this);
-        if (!arrType instanceof ArrayType) {
+        if (!(arrType instanceof ArrayType)) {
             throw new SemanticException(
                 "Variable " + r.id.id + "is not of type array.",
                 r.line,
                 r.offset);
         }
         Type index = r.expr.accept(this);
-        if (!index.equals(new IntegerType()) {
+        if (!index.equals(new IntegerType())) {
             throw new SemanticException(
                 "Array index expression must be of type int.",
-                a.line,
-                a.offset);
+                r.line,
+                r.offset);
         }
-        return arrType.type;
+        return ((ArrayType)arrType).type;
     }
     public Type visit(AssignmentStatement s) throws SemanticException{
         Type left = s.id.accept(this);
         Type right = s.expr.accept(this);
         if (!left.equals(right)) {
             throw new SemanticException(
-                "Variable " + variableName + " type does not match expression.",
+                "Variable " + s.id.id + " type does not match expression.",
                 s.line,
                 s.offset);
         }
@@ -78,7 +79,7 @@ public class TypeVisitor {
         return new BooleanType();
     }
     public Type visit(CharacterLiteral l) throws SemanticException{
-        return new CharacterType();
+        return new CharType();
     }
     public Type visit(Declaration d) throws SemanticException{
         if (this.vEnv.inCurrentScope(d.id.id)){
@@ -114,15 +115,18 @@ public class TypeVisitor {
                 e.line,
                 e.offset);
         }
-        return left;
+        return new BooleanType();
     }
 
     public Type visit(ExpressionStatement s) throws SemanticException{
         s.expr.accept(this);
+        return null;
     }
+
     public Type visit(FloatLiteral l) throws SemanticException{
         return new FloatType();
     }
+
     public Type visit(FormalParameters p) throws SemanticException{
         Declaration d;
         for (int i = 0; i < p.size; i++) {
@@ -154,15 +158,15 @@ public class TypeVisitor {
     public Type visit(FunctionCall f) throws SemanticException{
         if (this.fEnv.inCurrentScope(f.id.id)){
             FormalParameters fp = this.fEnv.lookup(f.id.id).formalParameters;
-            ArrayList<Expression> e = f.el;
-            if(e.size != fp.size) {
+            ArrayList<Expression> e = f.expressionList;
+            if(e.size() != fp.size) {
                 throw new SemanticException(
                     "Function " + f.id.id + " parameter length does not match.",
-                    e.line,
-                    e.offset);
+                    f.line,
+                    f.offset);
             }
-            for (int i = 0; i < e.size; i++) {
-                Type p = e.get(i).expr.accept(this);
+            for (int i = 0; i < e.size(); i++) {
+                Type p = e.get(i).accept(this);
                 if(!p.equals(fp.get(i).type.type)){
                     throw new SemanticException(
                         "Function " + f.id.id + " parameter " + fp.get(i).id.id + " type do not match.",
@@ -176,20 +180,20 @@ public class TypeVisitor {
                 f.line,
                 f.offset);
         }
-        return this.fEnv.ookup(f.id.id).declaration.type.type;
+        return this.fEnv.lookup(f.id.id).declaration.type.type;
     }
 
     public Type visit(FunctionDecl f) throws SemanticException{
-        this.currentFunctionReturnType = f.getDeclaration().accept(this);
+        this.currentFunctionReturnType = f.declaration.type.type;
         f.formalParameters.accept(this);
         return null;
     }
 
     public Type visit(Identifier i) throws SemanticException{
         if (!this.vEnv.inCurrentScope(i.id)) {
-            throw new SemanticException("Variable " + variableName + " is undeclared.",
-                a.line,
-                a.offset);
+            throw new SemanticException("Variable " + i.id + " is undeclared.",
+                i.line,
+                i.offset);
         }
         return this.vEnv.lookup(i.id);
     }
@@ -205,6 +209,7 @@ public class TypeVisitor {
         if (s.elseBlock != null) {
             s.elseBlock.accept(this);
         }
+        return null;
     }
     public Type visit(IntegerLiteral l) throws SemanticException{
         return new IntegerType();
@@ -224,7 +229,7 @@ public class TypeVisitor {
                 e.line,
                 e.offset);
         }
-        return left;
+        return new BooleanType();
     }
     public Type visit(MultiplyExpression e) throws SemanticException{
         Type left = e.leftExpr.accept(this);
@@ -245,7 +250,7 @@ public class TypeVisitor {
     }
     public Type visit(PrintlnStatement s) throws SemanticException{
         Type t = s.expr.accept(this);
-        if ( t instanceof ArrayType ) {
+        if ( (t instanceof ArrayType) || (t instanceof VoidType) ) {
             throw new SemanticException(
                 "Array cannot be printed.",
                 s.expr.line,
@@ -255,7 +260,7 @@ public class TypeVisitor {
     }
     public Type visit(PrintStatement s) throws SemanticException{
         Type t = s.expr.accept(this);
-        if ( t instanceof ArrayType ) {
+        if ( (t instanceof ArrayType) || (t instanceof VoidType)) {
             throw new SemanticException(
                 "Array cannot be printed.",
                 s.expr.line,
@@ -318,7 +323,7 @@ public class TypeVisitor {
             return null;
         }
         Type returnExprType = s.expr.accept(this);
-        if (!returnExprType.euqals(currentFunctionReturnType)){
+        if (!returnExprType.equals(currentFunctionReturnType)){
             throw new SemanticException(
                 "Return expression does not match function return type.",
                 s.line,
@@ -372,5 +377,6 @@ public class TypeVisitor {
                 s.expr.offset);
         }
         s.block.accept(this);
+        return null;
     }
 }

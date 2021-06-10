@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class EmptyStatement extends Statement {
     public void accept(Visitor v) {

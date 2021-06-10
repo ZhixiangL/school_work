@@ -1,4 +1,4 @@
-void foo (char c)
+int foo (char c)
 {
     return 0;
 }

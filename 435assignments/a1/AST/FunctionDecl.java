@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 import java.util.ArrayList;
 
@@ -11,8 +12,11 @@ public class FunctionDecl extends ASTNode {
         this.formalParameters = f;
     }
 
-    public void accept(PrettyPrintVisitor v) {
+    public void accept(Visitor v) {
         v.visit(this);
     }
 
+    public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
 }

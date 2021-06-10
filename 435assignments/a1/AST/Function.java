@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class Function extends ASTNode {
     public FunctionDecl functionDecl;

@@ -2,10 +2,10 @@ int _ (int x)
 {
 }
 
-void sampleTwo ()
+void main ()
 {
 }
 
-char[3000] _main (char a, int b, string c, boolean d, void e, float f)
+char[3000] _main (char a, int b, string c, boolean d, int e, float f)
 {
 }

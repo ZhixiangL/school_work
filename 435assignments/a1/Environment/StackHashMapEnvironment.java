@@ -1,4 +1,4 @@
-package environment;
+package Environment;
 
 import java.util.Stack;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class StackHashMapEnvironment<V> implements Environment<String, V> {
         this.stack.pop();
     }
 
-    public boolean inCurrentScope(K key) {
+    public boolean inCurrentScope(String key) {
         return this.stack.peek().containsKey(key);
     }
 

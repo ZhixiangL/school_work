@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class FloatLiteral extends Literal {
     public float value;

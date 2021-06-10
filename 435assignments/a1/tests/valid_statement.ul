@@ -1,4 +1,4 @@
-string foo ()
+string[10] foo ()
 {
     string[10] arr;
     int i;

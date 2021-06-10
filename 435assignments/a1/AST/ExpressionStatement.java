@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class ExpressionStatement extends Statement {
     public Expression expr;

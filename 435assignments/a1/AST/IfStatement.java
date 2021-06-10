@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class IfStatement extends Statement {
     public Expression expr;

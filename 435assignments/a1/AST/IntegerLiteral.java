@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class IntegerLiteral extends Literal {
     public int value;

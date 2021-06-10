@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class LessThanExpression extends Expression {
     

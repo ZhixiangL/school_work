@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 
 public class StringLiteral extends Literal {
     public String value;
