@@ -1,10 +1,9 @@
 void foo (char c)
 {
-    return 0;
+    return;
 }
 
 void main ()
 {
     foo();
-    foo2();
 }

@@ -281,7 +281,7 @@ public class TypeVisitor {
                     d.line,
                     d.offset);
             }
-            if (fName == "main"){
+            if (fName.equals("main")){
                 if (!type.equals(new VoidType())) {
                     throw new SemanticException(
                         "Main function must return type void.",
@@ -316,6 +316,12 @@ public class TypeVisitor {
         if (s.expr == null && !funcReturnType.equals(new VoidType())){
             throw new SemanticException(
                 "Return expression is empty and does not match the function return type.",
+                s.line,
+                s.offset);
+        }
+        else if (funcReturnType.equals(new VoidType()) && s.expr != null ){
+            throw new SemanticException(
+                "Return expression should be empty when the function return type is void.",
                 s.line,
                 s.offset);
         }

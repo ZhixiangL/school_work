@@ -48,6 +48,10 @@ program returns [Program p]
 {
         p = new Program();
 }
+@after{
+        p.line = 1;
+        p.offset = 0;
+}
 : 
         (f = function {p.add(f);} )+ EOF
 	;
@@ -57,6 +61,8 @@ function returns [Function f]
         fd = functionDecl fb = functionBody
         {
                 f = new Function(fd, fb);
+                f.line=fd.line;
+                f.offset=fd.offset;
         }
 	;
 
@@ -65,6 +71,8 @@ functionDecl returns [FunctionDecl fd]
         ct = compoundType id = identifier OPARENTHESES fp = formalParameters CPARENTHESES
         {
                 Declaration d = new Declaration(ct, id);
+                d.line=ct.line;
+                d.offset=ct.offset;
                 fd = new FunctionDecl(d, fp);
                 fd.line = ct.line;
                 fd.offset = ct.offset;
