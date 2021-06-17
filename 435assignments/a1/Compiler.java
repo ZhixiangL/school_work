@@ -29,11 +29,9 @@ public class Compiler {
 			Program program = parser.program();
 			program.accept(new TypeVisitor());
 		}
-		catch (RecognitionException e )	{
-			// A lexical or parsing error occured.
-			// ANTLR will have already printed information on the
-			// console due to code added to the grammar.  So there is
-			// nothing to do here.
+		catch (SemanticException e) {
+			System.out.println(e);
+			// e.printStackTrace();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
