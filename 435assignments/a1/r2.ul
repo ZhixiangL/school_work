@@ -1,9 +1,0 @@
-int [1] b2ar (float ww, char [22] wee)
-{
-    int a;
-    "this is Everything" ;
-    -12.2300 ;
-    'a';
-    true;
-    'a' + 13 - ("this " == 4.3) ;
-}
