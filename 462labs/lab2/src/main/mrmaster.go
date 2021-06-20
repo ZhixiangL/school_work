@@ -13,14 +13,15 @@ import "../mr"
 import "time"
 import "os"
 import "fmt"
+import "strconv"
 
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Fprintf(os.Stderr, "Usage: mrmaster inputfiles...\n")
 		os.Exit(1)
 	}
-
-	m := mr.MakeMaster(os.Args[1:], 5)
+	nReduce, _ := strconv.Atoi(os.Args[len(os.Args)-1])
+	m := mr.MakeMaster(os.Args[1:len(os.Args)-1], nReduce)
 	for m.Done() == false {
 		time.Sleep(time.Second)
 	}

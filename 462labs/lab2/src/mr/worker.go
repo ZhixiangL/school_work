@@ -45,11 +45,17 @@ func ihash(key string) int {
 //
 func Worker(mapf func(string, string) []KeyValue,
 	reducef func(string, []string) string) {
+	time1 := time.Now()
 	//map part
 	reply :=Call(-1, -1, -1)
 	for reply.Wait {
-		time.Sleep(2*time.Second)
+		time.Sleep(100*time.Millisecond)
 		reply = Call(-1, -1, -1)
+		if reply.error {
+			time3 := time.Now()
+			fmt.Println(os.Getpid(), "did nothing and took ", time3.Sub(time1).Seconds())
+			return
+		}
 	}
 	var filename string
 	var id int = -1
@@ -84,17 +90,20 @@ func Worker(mapf func(string, string) []KeyValue,
 			}
 			reply = Call(lastFileId, -1, id)
 			for reply.Wait {
-				time.Sleep(2*time.Second)
+				time.Sleep(100*time.Millisecond)
 				reply = Call(lastFileId, -1, id)
+				if reply.error {
+					time3 := time.Now()
+					fmt.Println(os.Getpid(), "did map and then wait and took ", time3.Sub(time1).Seconds())
+					return
+				}
 			}
 			
 		}
 	}
-
-	time.Sleep(2*time.Second)
+	time2 := time.Now()
 	lastReduceId := reply.NReduceId
 	for !reply.Stop {
-
 		matches, err := filepath.Glob("./mr-*-"+ strconv.Itoa(lastReduceId) )
 		if err != nil {
 				fmt.Println(err)
@@ -142,17 +151,23 @@ func Worker(mapf func(string, string) []KeyValue,
 		}
 		ofile.Close()
 
-		reply = Call(0, lastReduceId, id)
+		reply = Call(0, lastReduceId, id)		
 		for reply.Wait {
-			time.Sleep(2*time.Second)
+			time.Sleep(100*time.Millisecond)
 			reply = Call(0, lastReduceId, id)
+			if reply.error {
+				time3 := time.Now()
+				fmt.Println(os.Getpid(), "error: Map time is ", time2.Sub(time1).Seconds(), "; Reduce time is ", time3.Sub(time2).Seconds())
+				return
+			}
 		}
 		filename = reply.FileName
 		lastReduceId = reply.NReduceId
-
+		
 	
 	}
-
+	time3 := time.Now()
+	fmt.Println(os.Getpid(), ": Map time is ", time2.Sub(time1).Seconds(), "; Reduce time is ", time3.Sub(time2).Seconds())
 	return
 
 	//
@@ -174,9 +189,10 @@ func Call(lastFileId int, lastReduceId int, id int) Reply{
 	reply := Reply{}
 
 	// send the RPC request, wait for the reply.
-	call("Master.Example", &args, &reply)
-
-	// reply.Y should be 100.
+	result := call("Master.Example", &args, &reply)
+	if !result {
+		reply.error = true
+	}
 	return reply
 }
 

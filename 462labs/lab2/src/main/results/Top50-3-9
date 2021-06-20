@@ -1,0 +1,38 @@
+1510 : Map time is  13.1183561 ; Reduce time is  7.7979856
+1509 : Map time is  13.186069 ; Reduce time is  7.8030783
+1511 : Map time is  13.0281481 ; Reduce time is  7.9377308
+Master: Map time is  13.1332785 ; Reduce time is  8.8727216
+
+Input files:
+32M	../PublicDomain/Top50
+32M	total
+
+Intermediate files:
+6.0M	../mr-tmp/mr-0-0
+4.9M	../mr-tmp/mr-0-1
+6.5M	../mr-tmp/mr-0-2
+4.9M	../mr-tmp/mr-0-3
+5.1M	../mr-tmp/mr-0-4
+6.6M	../mr-tmp/mr-0-5
+4.2M	../mr-tmp/mr-0-6
+3.9M	../mr-tmp/mr-0-7
+6.8M	../mr-tmp/mr-0-8
+6.8M	../mr-tmp/mr-1-0
+5.4M	../mr-tmp/mr-1-1
+7.2M	../mr-tmp/mr-1-2
+5.5M	../mr-tmp/mr-1-3
+6.1M	../mr-tmp/mr-1-4
+7.3M	../mr-tmp/mr-1-5
+4.5M	../mr-tmp/mr-1-6
+4.4M	../mr-tmp/mr-1-7
+8.2M	../mr-tmp/mr-1-8
+6.0M	../mr-tmp/mr-2-0
+4.9M	../mr-tmp/mr-2-1
+6.2M	../mr-tmp/mr-2-2
+5.4M	../mr-tmp/mr-2-3
+5.4M	../mr-tmp/mr-2-4
+6.2M	../mr-tmp/mr-2-5
+4.3M	../mr-tmp/mr-2-6
+4.5M	../mr-tmp/mr-2-7
+7.2M	../mr-tmp/mr-2-8
+153M	total

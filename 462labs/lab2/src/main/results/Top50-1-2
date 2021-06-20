@@ -1,0 +1,11 @@
+531 : Map time is  25.2724683 ; Reduce time is  22.1552597
+Master: Map time is  25.2899674 ; Reduce time is  22.7332344
+
+Input files:
+32M	../PublicDomain/Top50
+32M	total
+
+Intermediate files:
+92M	../mr-tmp/mr-0-0
+61M	../mr-tmp/mr-0-1
+153M	total

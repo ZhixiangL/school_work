@@ -1,0 +1,20 @@
+1034 : Map time is  19.639029700000002 ; Reduce time is  10.840093
+1033 : Map time is  19.5723257 ; Reduce time is  11.0019453
+1032 : Map time is  19.6269533 ; Reduce time is  10.9416968
+Master: Map time is  19.8038817 ; Reduce time is  11.2071701
+
+Input files:
+32M	../PublicDomain/Top50
+32M	total
+
+Intermediate files:
+17M	../mr-tmp/mr-0-0
+15M	../mr-tmp/mr-0-1
+22M	../mr-tmp/mr-0-2
+16M	../mr-tmp/mr-1-0
+15M	../mr-tmp/mr-1-1
+20M	../mr-tmp/mr-1-2
+16M	../mr-tmp/mr-2-0
+15M	../mr-tmp/mr-2-1
+21M	../mr-tmp/mr-2-2
+153M	total

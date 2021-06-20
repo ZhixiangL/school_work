@@ -1,0 +1,26 @@
+1198 : Map time is  13.170743 ; Reduce time is  9.5527515
+1196 : Map time is  13.221088 ; Reduce time is  9.5622024
+1197 : Map time is  13.1305692 ; Reduce time is  9.6606649
+Master: Map time is  13.1712794 ; Reduce time is  9.8791958
+
+Input files:
+32M	../PublicDomain/Top50
+32M	total
+
+Intermediate files:
+6.9M	../mr-tmp/mr-0-0
+12M	../mr-tmp/mr-0-1
+13M	../mr-tmp/mr-0-2
+9.7M	../mr-tmp/mr-0-3
+9.4M	../mr-tmp/mr-0-4
+7.6M	../mr-tmp/mr-1-0
+13M	../mr-tmp/mr-1-1
+13M	../mr-tmp/mr-1-2
+11M	../mr-tmp/mr-1-3
+11M	../mr-tmp/mr-1-4
+6.8M	../mr-tmp/mr-2-0
+12M	../mr-tmp/mr-2-1
+13M	../mr-tmp/mr-2-2
+9.7M	../mr-tmp/mr-2-3
+9.7M	../mr-tmp/mr-2-4
+153M	total

@@ -13,6 +13,7 @@ import "os"
 import "log"
 import "io/ioutil"
 import "sort"
+import "time"
 
 // for sorting by key.
 type ByKey []mr.KeyValue
@@ -35,6 +36,7 @@ func main() {
 	// pass it to Map,
 	// accumulate the intermediate Map output.
 	//
+	time1 := time.Now()
 	intermediate := []mr.KeyValue{}
 	for _, filename := range os.Args[2:] {
 		file, err := os.Open(filename)
@@ -55,6 +57,7 @@ func main() {
 	// intermediate data is in one place, intermediate[],
 	// rather than being partitioned into NxM buckets.
 	//
+	time2 := time.Now()
 
 	sort.Sort(ByKey(intermediate))
 
@@ -82,6 +85,8 @@ func main() {
 
 		i = j
 	}
+	time3 := time.Now()
+	fmt.Println("Sequential: Map time is ", time2.Sub(time1).Seconds(), "; Reduce time is ", time3.Sub(time2).Seconds(), "\n")
 
 	ofile.Close()
 }

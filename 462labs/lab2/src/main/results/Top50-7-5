@@ -1,0 +1,50 @@
+31412 : Map time is  11.8263286 ; Reduce time is  7.6190147
+31406 : Map time is  11.7723107 ; Reduce time is  7.6736938
+31411 : Map time is  11.7401804 ; Reduce time is  7.668219
+31450 : Map time is  11.8259392 ; Reduce time is  7.6724982
+31414 : Map time is  19.5021221 ; Reduce time is  4e-07
+31410 : Map time is  19.5441946 ; Reduce time is  9e-07
+31413 : Map time is  11.8344397 ; Reduce time is  7.7158535
+Master: Map time is  11.8783472 ; Reduce time is  8.1449425
+
+Input files:
+32M	../PublicDomain/Top50
+32M	total
+
+Intermediate files:
+2.6M	../mr-tmp/mr-0-0
+4.5M	../mr-tmp/mr-0-1
+4.5M	../mr-tmp/mr-0-2
+3.7M	../mr-tmp/mr-0-3
+3.7M	../mr-tmp/mr-0-4
+2.9M	../mr-tmp/mr-1-0
+4.7M	../mr-tmp/mr-1-1
+4.8M	../mr-tmp/mr-1-2
+3.8M	../mr-tmp/mr-1-3
+3.7M	../mr-tmp/mr-1-4
+3.0M	../mr-tmp/mr-2-0
+5.4M	../mr-tmp/mr-2-1
+5.7M	../mr-tmp/mr-2-2
+4.4M	../mr-tmp/mr-2-3
+4.5M	../mr-tmp/mr-2-4
+3.0M	../mr-tmp/mr-3-0
+5.2M	../mr-tmp/mr-3-1
+5.5M	../mr-tmp/mr-3-2
+4.2M	../mr-tmp/mr-3-3
+4.3M	../mr-tmp/mr-3-4
+3.9M	../mr-tmp/mr-4-0
+5.8M	../mr-tmp/mr-4-1
+6.0M	../mr-tmp/mr-4-2
+5.1M	../mr-tmp/mr-4-3
+5.1M	../mr-tmp/mr-4-4
+2.8M	../mr-tmp/mr-5-0
+4.9M	../mr-tmp/mr-5-1
+5.4M	../mr-tmp/mr-5-2
+4.0M	../mr-tmp/mr-5-3
+3.9M	../mr-tmp/mr-5-4
+3.3M	../mr-tmp/mr-6-0
+5.5M	../mr-tmp/mr-6-1
+5.8M	../mr-tmp/mr-6-2
+4.6M	../mr-tmp/mr-6-3
+4.5M	../mr-tmp/mr-6-4
+153M	total
