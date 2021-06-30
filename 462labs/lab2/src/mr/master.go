@@ -6,7 +6,7 @@ import "os"
 import "net/rpc"
 import "net/http"
 import "time"
-//import "fmt"
+import "fmt"
 import "sync"
 
 type Master struct {
@@ -21,6 +21,9 @@ type Master struct {
 	mapDone bool
 	reduceDone bool 
 	mapId int
+	time1 time.Time
+	time2 time.Time
+	time3 time.Time
 }
 
 // Your code here -- RPC handlers for the worker to call.
@@ -52,7 +55,7 @@ func (m *Master) allReducesDone() bool {
 
 func (m *Master) assignNReduce(reply *Reply) {
 	for i := 0; i < m.nReduce; i++ {
-		if (m.nReduceStatus[i]==0) || (m.nReduceStatus[i]==1 && m.countDown[i].Add(10*time.Second).Before(time.Now())) {
+		if (m.nReduceStatus[i]==0) || (m.nReduceStatus[i]==1 && m.countDown[i].Add(15*time.Minute).Before(time.Now())) {
 			m.nReduceStatus[i] = 1
 			m.countDown[i] = time.Now()
 			reply.NReduceId = i
@@ -103,6 +106,7 @@ func (m *Master) Example(args *Args, reply *Reply) error {
 			m.mapDone = true
 			reply.MapStop = true
 			m.countDown = make([]time.Time, m.nReduce)
+			m.time2 = time.Now()
 			m.assignNReduce(reply)
 			defer m.mu.Unlock()
 			return nil
@@ -113,6 +117,7 @@ func (m *Master) Example(args *Args, reply *Reply) error {
 			m.nReduceStatus[args.LastReduceId] = 2
 			if m.allReducesDone(){
 				m.reduceDone = true
+				reply.Stop = true
 				defer m.mu.Unlock()
 				return nil
 			}
@@ -139,6 +144,7 @@ func (m *Master) server() {
 	if e != nil {
 		log.Fatal("listen error:", e)
 	}
+	m.time1 = time.Now()
 	go http.Serve(l, nil)
 }
 
@@ -147,7 +153,11 @@ func (m *Master) server() {
 // if the entire job has finished.
 //
 func (m *Master) Done() bool {
+	if m.mapDone && m.reduceDone {
+		m.time3 = time.Now()
+		fmt.Println("Master: Map time is ", m.time2.Sub(m.time1).Seconds()-1, "; Reduce time is ", m.time3.Sub(m.time2).Seconds())
 
+	}
 	return m.mapDone && m.reduceDone
 }
 

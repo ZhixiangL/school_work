@@ -1,0 +1,148 @@
+13806 : Map time is  21.2931078 ; Reduce time is  21.9755746
+13779 : Map time is  43.2153044 ; Reduce time is  7e-07
+13780 : Map time is  21.271243 ; Reduce time is  21.9993696
+13774 : Map time is  43.2987101 ; Reduce time is  1.1e-06
+13853 : Map time is  43.2537286 ; Reduce time is  9e-07
+13966 : Map time is  43.0343114 ; Reduce time is  9e-07
+13775 : Map time is  21.2072103 ; Reduce time is  22.0109981
+13816 : Map time is  43.2819159 ; Reduce time is  1.1e-06
+13819 : Map time is  43.2569876 ; Reduce time is  6e-07
+13751 : Map time is  21.2907869 ; Reduce time is  22.0244137
+13778 : Map time is  21.1522797 ; Reduce time is  22.0297446
+13773 : Map time is  43.2867644 ; Reduce time is  9e-07
+13829 : Map time is  21.1154203 ; Reduce time is  22.0494796
+13785 : Map time is  43.341295 ; Reduce time is  1e-06
+13786 : Map time is  43.2527096 ; Reduce time is  9e-07
+13753 : Map time is  43.3660483 ; Reduce time is  6e-07
+13863 : Map time is  43.1744658 ; Reduce time is  8e-07
+13923 : Map time is  43.1523473 ; Reduce time is  9e-07
+13801 : Map time is  43.3412525 ; Reduce time is  6e-07
+13782 : Map time is  21.3359975 ; Reduce time is  22.0459649
+13820 : Map time is  43.2386541 ; Reduce time is  8e-07
+13784 : Map time is  43.3801477 ; Reduce time is  5e-07
+13848 : Map time is  21.1187129 ; Reduce time is  22.0802677
+13834 : Map time is  43.2694821 ; Reduce time is  1e-06
+13881 : Map time is  43.2534807 ; Reduce time is  1e-06
+13868 : Map time is  43.2389904 ; Reduce time is  7e-07
+13811 : Map time is  21.1016853 ; Reduce time is  22.0818406
+13770 : Map time is  43.3375546 ; Reduce time is  9e-07
+13776 : Map time is  43.36916 ; Reduce time is  8e-07
+13763 : Map time is  43.3360925 ; Reduce time is  5e-07
+13783 : Map time is  43.4208588 ; Reduce time is  7e-07
+13777 : Map time is  43.411921 ; Reduce time is  9e-07
+13869 : Map time is  43.3563483 ; Reduce time is  7e-07
+13781 : Map time is  43.3474364 ; Reduce time is  9e-07
+13914 : Map time is  43.2714099 ; Reduce time is  5e-07
+13765 : Map time is  21.2378558 ; Reduce time is  22.1031649
+13894 : Map time is  43.2070255 ; Reduce time is  9e-07
+13767 : Map time is  43.4249188 ; Reduce time is  1.2e-06
+13757 : Map time is  43.3360483 ; Reduce time is  8e-07
+13901 : Map time is  43.1284378 ; Reduce time is  9e-07
+Master: Map time is  21.6201003 ; Reduce time is  22.467791599999998
+
+Input files:
+32M	../PublicDomain/Top50
+32M	total
+
+Intermediate files:
+288K	../mr-tmp/mr-0-0
+280K	../mr-tmp/mr-0-1
+612K	../mr-tmp/mr-0-2
+300K	../mr-tmp/mr-0-3
+344K	../mr-tmp/mr-0-4
+252K	../mr-tmp/mr-0-5
+636K	../mr-tmp/mr-0-6
+336K	../mr-tmp/mr-0-7
+432K	../mr-tmp/mr-0-8
+328K	../mr-tmp/mr-0-9
+148K	../mr-tmp/mr-1-0
+148K	../mr-tmp/mr-1-1
+300K	../mr-tmp/mr-1-2
+140K	../mr-tmp/mr-1-3
+184K	../mr-tmp/mr-1-4
+144K	../mr-tmp/mr-1-5
+404K	../mr-tmp/mr-1-6
+216K	../mr-tmp/mr-1-7
+252K	../mr-tmp/mr-1-8
+188K	../mr-tmp/mr-1-9
+1.1M	../mr-tmp/mr-2-0
+1.1M	../mr-tmp/mr-2-1
+2.4M	../mr-tmp/mr-2-2
+1016K	../mr-tmp/mr-2-3
+1.7M	../mr-tmp/mr-2-4
+1016K	../mr-tmp/mr-2-5
+2.4M	../mr-tmp/mr-2-6
+1.3M	../mr-tmp/mr-2-7
+1.9M	../mr-tmp/mr-2-8
+1.4M	../mr-tmp/mr-2-9
+1.4M	../mr-tmp/mr-3-0
+1.4M	../mr-tmp/mr-3-1
+3.0M	../mr-tmp/mr-3-2
+1.3M	../mr-tmp/mr-3-3
+2.1M	../mr-tmp/mr-3-4
+1.3M	../mr-tmp/mr-3-5
+3.1M	../mr-tmp/mr-3-6
+1.7M	../mr-tmp/mr-3-7
+2.4M	../mr-tmp/mr-3-8
+1.8M	../mr-tmp/mr-3-9
+56K	../mr-tmp/mr-4-0
+56K	../mr-tmp/mr-4-1
+132K	../mr-tmp/mr-4-2
+60K	../mr-tmp/mr-4-3
+84K	../mr-tmp/mr-4-4
+56K	../mr-tmp/mr-4-5
+128K	../mr-tmp/mr-4-6
+68K	../mr-tmp/mr-4-7
+104K	../mr-tmp/mr-4-8
+80K	../mr-tmp/mr-4-9
+196K	../mr-tmp/mr-5-0
+392K	../mr-tmp/mr-5-1
+524K	../mr-tmp/mr-5-2
+280K	../mr-tmp/mr-5-3
+276K	../mr-tmp/mr-5-4
+228K	../mr-tmp/mr-5-5
+480K	../mr-tmp/mr-5-6
+524K	../mr-tmp/mr-5-7
+304K	../mr-tmp/mr-5-8
+396K	../mr-tmp/mr-5-9
+148K	../mr-tmp/mr-6-0
+160K	../mr-tmp/mr-6-1
+376K	../mr-tmp/mr-6-2
+156K	../mr-tmp/mr-6-3
+232K	../mr-tmp/mr-6-4
+160K	../mr-tmp/mr-6-5
+416K	../mr-tmp/mr-6-6
+212K	../mr-tmp/mr-6-7
+300K	../mr-tmp/mr-6-8
+208K	../mr-tmp/mr-6-9
+60K	../mr-tmp/mr-7-0
+56K	../mr-tmp/mr-7-1
+128K	../mr-tmp/mr-7-2
+60K	../mr-tmp/mr-7-3
+92K	../mr-tmp/mr-7-4
+60K	../mr-tmp/mr-7-5
+140K	../mr-tmp/mr-7-6
+76K	../mr-tmp/mr-7-7
+108K	../mr-tmp/mr-7-8
+92K	../mr-tmp/mr-7-9
+792K	../mr-tmp/mr-8-0
+804K	../mr-tmp/mr-8-1
+1.8M	../mr-tmp/mr-8-2
+836K	../mr-tmp/mr-8-3
+1.2M	../mr-tmp/mr-8-4
+716K	../mr-tmp/mr-8-5
+1.9M	../mr-tmp/mr-8-6
+1.1M	../mr-tmp/mr-8-7
+1.4M	../mr-tmp/mr-8-8
+1.1M	../mr-tmp/mr-8-9
+628K	../mr-tmp/mr-9-0
+648K	../mr-tmp/mr-9-1
+1.4M	../mr-tmp/mr-9-2
+640K	../mr-tmp/mr-9-3
+968K	../mr-tmp/mr-9-4
+652K	../mr-tmp/mr-9-5
+1.7M	../mr-tmp/mr-9-6
+940K	../mr-tmp/mr-9-7
+1.2M	../mr-tmp/mr-9-8
+936K	../mr-tmp/mr-9-9
+69M	total

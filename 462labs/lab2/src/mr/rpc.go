@@ -29,6 +29,7 @@ type Reply struct {
 	NReduce int
 	Wait bool
 	MapId int
+	error bool
 }
 
 // Add your RPC definitions here.
