@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 import java.util.ArrayList;
 

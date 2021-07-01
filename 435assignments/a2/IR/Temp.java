@@ -1,6 +1,6 @@
 package IR;
 
-import type.*;
+import Type.*;
 
 public class Temp {
     public Type type;

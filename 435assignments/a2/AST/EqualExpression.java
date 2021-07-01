@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 public class EqualExpression extends Expression {
     
@@ -16,6 +17,10 @@ public class EqualExpression extends Expression {
     }
 
     public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
+    public Temp accept(TempVisitor v) {
         return v.visit(this);
     }
 }

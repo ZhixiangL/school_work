@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 public class ArrayReference extends Expression {
     public Expression expr;
@@ -15,6 +16,10 @@ public class ArrayReference extends Expression {
     }
 
     public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
+    public Temp accept(TempVisitor v) {
         return v.visit(this);
     }
 

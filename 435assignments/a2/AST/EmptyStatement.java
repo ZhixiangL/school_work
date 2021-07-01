@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 public class EmptyStatement extends Statement {
     public void accept(Visitor v) {
@@ -7,6 +8,10 @@ public class EmptyStatement extends Statement {
     }
 
     public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
+    public Temp accept(TempVisitor v) {
         return v.visit(this);
     }
 }

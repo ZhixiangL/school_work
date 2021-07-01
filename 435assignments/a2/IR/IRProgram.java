@@ -1,13 +1,13 @@
 package IR;
 
+import java.lang.StringBuilder;
 import java.util.ArrayList;
-import java.util.List;
 
 public class IRProgram {
     public String name;
-    public List<IRFunction> functions;
+    public ArrayList<IRFunction> functions;
 
-    public Program(String name) {
+    public IRProgram(String name) {
         this.name = name;
         this.functions = new ArrayList<IRFunction>();
     }
@@ -16,4 +16,13 @@ public class IRProgram {
         this.functions.add(function);
     }
 
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(this.name+"\n");
+        for (int i=0; i<this.functions.size(); i++){
+            s.append(this.functions.get(i));
+            s.append("\n");
+        }
+        return s.toString();
+    }
 }

@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 public class StringLiteral extends Literal {
     public String value;
@@ -13,6 +14,10 @@ public class StringLiteral extends Literal {
     }
 
     public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
+    public Temp accept(TempVisitor v) {
         return v.visit(this);
     }
 }

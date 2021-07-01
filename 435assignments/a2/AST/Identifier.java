@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 public class Identifier extends Expression {
     public String id;
@@ -13,6 +14,10 @@ public class Identifier extends Expression {
     }
 
     public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
+    public Temp accept(TempVisitor v) {
         return v.visit(this);
     }
 }

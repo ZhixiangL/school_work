@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,10 @@ public class Program extends ASTNode {
     }
 
     public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
+    public Temp accept(TempVisitor v) {
         return v.visit(this);
     }
 }

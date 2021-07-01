@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 public class Function extends ASTNode {
     public FunctionDecl functionDecl;
@@ -15,6 +16,10 @@ public class Function extends ASTNode {
     }
 
     public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
+    public Temp accept(TempVisitor v) {
         return v.visit(this);
     }
 }

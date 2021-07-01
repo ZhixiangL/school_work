@@ -13,9 +13,9 @@ public class IRFunction extends IRInstruction {
 
     public TempFactory tFactory;
     public LabelFactory lFactory;
-    public List<Instruction> instructions;
+    public List<IRInstruction> instructions;
 
-    public Function(String name, Type returnType, List<Type> parameterTypes) {
+    public IRFunction(String name, Type returnType, List<Type> parameterTypes) {
         this.name = name;
         this.returnType = returnType;
         this.parameterTypes = parameterTypes;
@@ -29,8 +29,23 @@ public class IRFunction extends IRInstruction {
         this.signature = sb.toString();
     }
 
-    public TempFactory getTempFactory() {
-        return this.tempFactory;
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append("FUNC ");
+        s.append(name+" ");
+        s.append(this.signature);
+        s.append("\n{\n");
+        s.append(tFactory);
+        for (int i=0; i<this.instructions.size();i++){
+            if (!(this.instructions.get(i) instanceof Label)){
+                s.append("    ");
+            }
+            
+            s.append(this.instructions.get(i));
+            s.append("\n");
+        }
+        s.append("}");
+        return s.toString();
     }
 
 }

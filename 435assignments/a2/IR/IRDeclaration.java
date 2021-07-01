@@ -10,4 +10,5 @@ public class IRDeclaration extends IRInstruction {
         this.dest = dest;
         this.type = type;
     }
+
 }

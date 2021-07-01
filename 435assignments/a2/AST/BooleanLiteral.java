@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 public class BooleanLiteral extends Literal {
     public boolean value;
@@ -13,6 +14,10 @@ public class BooleanLiteral extends Literal {
     }
 
     public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
+    public Temp accept(TempVisitor v) {
         return v.visit(this);
     }
 }

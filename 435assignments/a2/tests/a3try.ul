@@ -1,0 +1,13 @@
+void main ()
+{
+}
+
+void FOO (boolean a)
+{
+    if (a) {
+        print 1;
+    }
+    else {
+        println "abc";
+    }
+}

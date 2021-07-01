@@ -1,5 +1,6 @@
 package AST;
 import Type.*;
+import IR.*;
 
 public class IfStatement extends Statement {
     public Expression expr;
@@ -23,6 +24,10 @@ public class IfStatement extends Statement {
     }
 
     public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
+
+    public Temp accept(TempVisitor v) {
         return v.visit(this);
     }
 

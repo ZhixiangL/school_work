@@ -1,4 +1,5 @@
 package IR;
+import java.lang.StringBuilder;
 
 public class IRArrayAssignmentInstruction extends IRInstruction {
     public Temp id;
@@ -10,5 +11,17 @@ public class IRArrayAssignmentInstruction extends IRInstruction {
         this.id = id;
         this.index = index;
         this.right = right;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.id);
+        sb.append("[");
+        sb.append(this.index);
+        sb.append("]");
+        sb.append(" := ");
+        sb.append(this.right);
+        sb.append(";");
+        return sb.toString();
     }
 }

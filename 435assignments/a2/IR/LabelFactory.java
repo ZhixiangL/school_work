@@ -8,7 +8,7 @@ public class LabelFactory {
     }
 
     public Label getLabel() {
-        Label Label = new Label(this.labelCount);
+        Label Label = new Label(this.count);
         this.count++;
         return Label;
     }

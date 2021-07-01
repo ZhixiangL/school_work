@@ -1,13 +1,23 @@
 package IR;
+import java.lang.StringBuilder;
+import Type.*;
 
-public class IRArrayRef extends IRInstruction {
-    public Temp dest;
+public class IRArrayRef extends Temp {
+    public Temp index;
     public Temp id;
-    public Temp expr;
 
-    public IRArrayRef(Temp dest, Temp id, Temp expr){
-        this.dest = dest;
+    public IRArrayRef(Temp id, Temp index){
+        super(((ArrayType)id.type).type, 0);
+        this.index = index;
         this.id = id;
-        this.expr = expr;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.id);
+        sb.append("[");
+        sb.append(this.index);
+        sb.append("]");
+        return sb.toString();
     }
 }
