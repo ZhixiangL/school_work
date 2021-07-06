@@ -14,7 +14,7 @@ public class IRIfStatement extends IRInstruction {
         sb.append("IF ");
         sb.append(expr);
         sb.append(" GOTO ");
-        sb.append(go);
+        sb.append("L"+Integer.toString(go.number)+";");
         return sb.toString();
     }
 }

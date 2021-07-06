@@ -28,10 +28,14 @@ public class Compiler {
 		Program program = parser.program();
 		try {
 			program.accept(new TypeVisitor());
-			TempVisitor tVisitor = new TempVisitor(args[0]);
+			String programName = args[0].substring(6,(args[0].length()-3));
+			TempVisitor tVisitor = new TempVisitor(programName);
 			program.accept(tVisitor);
 			IRProgram prog = tVisitor.program;
-			System.out.println(prog);
+			FileWriter myWriter = new FileWriter(programName+".ir");
+			myWriter.write(prog.toString());
+			myWriter.close();
+	
 		}
 		catch (SemanticException e) {
 			System.out.println(e);

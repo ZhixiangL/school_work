@@ -22,10 +22,11 @@ public class IRUnaryOp extends IRInstruction {
         sb.append(this.dest);
         sb.append(" := ");
         if (op==IRUOp.INVERT){
-            sb.append("!");
+            sb.append("Z! ");
         }
         else {
-            sb.append("-");
+            sb.append(this.rhs.type.toChar());
+            sb.append("- ");
         }
         sb.append(this.rhs);
         sb.append(";");

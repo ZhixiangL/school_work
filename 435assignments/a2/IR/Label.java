@@ -8,7 +8,7 @@ public class Label extends IRInstruction {
     }
 
     public String toString(){
-        return "L"+Integer.toString(this.number)+";";
+        return "L"+Integer.toString(this.number)+":;";
     }
 
 }

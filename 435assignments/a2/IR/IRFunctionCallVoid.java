@@ -17,7 +17,7 @@ public class IRFunctionCallVoid extends IRInstruction {
         sb.append(functionName);
         sb.append("(");
         for (int i=0; i<this.expressionList.size();i++){
-            sb.append(this.expressionList.get(i).type.toChar());
+            sb.append(this.expressionList.get(i));
         }
         sb.append(");");
         return sb.toString();

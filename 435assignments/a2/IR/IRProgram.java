@@ -18,6 +18,7 @@ public class IRProgram {
 
     public String toString() {
         StringBuilder s = new StringBuilder();
+        s.append("PROG ");
         s.append(this.name+"\n");
         for (int i=0; i<this.functions.size(); i++){
             s.append(this.functions.get(i));

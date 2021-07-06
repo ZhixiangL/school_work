@@ -43,7 +43,10 @@ public class TempVisitor {
     public Temp visit(ArrayReference r){
         Temp id = r.id.accept(this);
         Temp index = r.expr.accept(this);
-        return new IRArrayRef(id, index);
+        Temp dest = this.tFactory.getTemp(((ArrayType)id.type).type);
+        IRInstruction ir = new IRArrayRef(dest, id, index);
+        this.funcInstrs.add(ir);
+        return dest;
     }
 
     public Temp visit(AssignmentStatement s){
@@ -91,7 +94,7 @@ public class TempVisitor {
     public Temp visit(EqualExpression e){
         Temp lhs = e.leftExpr.accept(this);
         Temp rhs = e.rightExpr.accept(this);
-        Temp dest = this.tFactory.getTemp(lhs.type);
+        Temp dest = this.tFactory.getTemp(new BooleanType());
         IRInstruction ir = new IRBinaryOp(dest, lhs, rhs, IRBinaryOp.IRBiOp.EQUAL);
         funcInstrs.add(ir);
 
@@ -221,7 +224,7 @@ public class TempVisitor {
     public Temp visit(LessThanExpression e){
         Temp lhs = e.leftExpr.accept(this);
         Temp rhs = e.rightExpr.accept(this);
-        Temp dest = this.tFactory.getTemp(lhs.type);
+        Temp dest = this.tFactory.getTemp(new BooleanType());
         IRInstruction ir = new IRBinaryOp(dest, lhs, rhs, IRBinaryOp.IRBiOp.LESSTHAN);
         funcInstrs.add(ir);
 
@@ -316,6 +319,7 @@ public class TempVisitor {
         IRInstruction ir;
         Label l1 = this.lFactory.getLabel();
         Label l2 = this.lFactory.getLabel();
+        this.funcInstrs.add(l2);
         Temp t = s.expr.accept(this);
         if (this.tFactory.isParameterOrLocal(t)){
             Temp t2 = this.tFactory.getTemp(new BooleanType());
@@ -325,7 +329,7 @@ public class TempVisitor {
         }
         ir = new IRUnaryOp(t,t, IRUnaryOp.IRUOp.INVERT);
         this.funcInstrs.add(ir);
-        this.funcInstrs.add(l2);
+        
         ir = new IRIfStatement(t, l1);
         this.funcInstrs.add(ir);
         s.block.accept(this);
