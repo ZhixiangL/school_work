@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 import java.lang.StringBuilder;
 
 public class IRAssignmentInstruction extends IRInstruction {
@@ -19,5 +20,9 @@ public class IRAssignmentInstruction extends IRInstruction {
         s.append(rhs);
         s.append(";");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 }

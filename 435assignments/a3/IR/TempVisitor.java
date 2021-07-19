@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 
 import AST.*;
 import Type.*;

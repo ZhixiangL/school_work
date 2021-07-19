@@ -1,11 +1,10 @@
 package IR;
 
 import Type.*;
-import java.lang.StringBuilder;
 
 public class TempFactory {
-    private TempEntry[] tempArray;
-    private int pos;
+    public TempEntry[] tempArray;
+    public int pos;
 
     public TempFactory() {
         this.tempArray = new TempEntry[65536];
@@ -48,4 +47,5 @@ public class TempFactory {
         }
         return s.toString();
     }
+
 }

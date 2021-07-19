@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 
 public class Label extends IRInstruction {
     public int number;
@@ -9,6 +10,10 @@ public class Label extends IRInstruction {
 
     public String toString(){
         return "L"+Integer.toString(this.number)+":;";
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 
 }

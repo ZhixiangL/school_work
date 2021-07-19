@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 
 public class IRPrint extends IRInstruction {
     public Temp temp;
@@ -15,5 +16,9 @@ public class IRPrint extends IRInstruction {
         s.append(this.temp);
         s.append(";");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 }

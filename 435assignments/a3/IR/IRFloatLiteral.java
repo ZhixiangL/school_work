@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 
 public class IRFloatLiteral extends IRInstruction {
     public Temp dest;
@@ -16,5 +17,9 @@ public class IRFloatLiteral extends IRInstruction {
         s.append(Float.toString(this.value));
         s.append(";");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 }

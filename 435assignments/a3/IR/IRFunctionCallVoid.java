@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 
 import java.util.ArrayList;
 
@@ -21,5 +22,9 @@ public class IRFunctionCallVoid extends IRInstruction {
         }
         s.append(");");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 }

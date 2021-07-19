@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 
 
 
@@ -31,5 +32,9 @@ public class IRUnaryOp extends IRInstruction {
         s.append(this.rhs);
         s.append(";");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 }

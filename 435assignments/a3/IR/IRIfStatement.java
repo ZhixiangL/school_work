@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 
 public class IRIfStatement extends IRInstruction {
     public Temp expr;
@@ -16,5 +17,9 @@ public class IRIfStatement extends IRInstruction {
         s.append(" GOTO ");
         s.append("L"+Integer.toString(go.number)+";");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 }

@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 
 public class IRBooleanLiteral extends IRInstruction {
     public Temp dest;
@@ -16,5 +17,9 @@ public class IRBooleanLiteral extends IRInstruction {
         s.append(this.value ? "TRUE" : "FALSE");
         s.append(";");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 }

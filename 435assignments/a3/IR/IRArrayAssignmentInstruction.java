@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 import java.lang.StringBuilder;
 
 public class IRArrayAssignmentInstruction extends IRInstruction {
@@ -23,5 +24,9 @@ public class IRArrayAssignmentInstruction extends IRInstruction {
         s.append(this.right);
         s.append(";");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 }

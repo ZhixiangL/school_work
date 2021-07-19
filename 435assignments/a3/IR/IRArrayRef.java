@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 import java.lang.StringBuilder;
 import Type.*;
 
@@ -22,5 +23,9 @@ public class IRArrayRef extends IRInstruction {
         s.append(this.index);
         s.append("];");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 }

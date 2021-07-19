@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 import java.lang.StringBuilder;
 
 public class IRReturn extends IRInstruction {
@@ -17,6 +18,10 @@ public class IRReturn extends IRInstruction {
         }
         s.append(";");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 
 }

@@ -11,4 +11,5 @@ public class IRDeclaration extends IRInstruction {
         this.type = type;
     }
 
+
 }

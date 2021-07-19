@@ -1,4 +1,5 @@
 package IR;
+import CodeGen.CodeGenVisitor;
 
 import java.lang.StringBuilder;
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ public class IRFunction extends IRInstruction {
         }
         s.append("}");
         return s.toString();
+    }
+
+    public void accept(CodeGenVisitor v){
+        v.visit(this);
     }
 
 }
